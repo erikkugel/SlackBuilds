@@ -6,8 +6,9 @@ BUILD=1
 VERSION=4.2.7p410
 BUILD_DIR=/tmp/build-$(date +%s)
 
-mkdir -pv ${BUILD_DIR}/install
+mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d
 cp -vf slack-desc ${BUILD_DIR}/install
+cp -vf rc.ntpd-dev ${BUILD_DIR}/etc/rc.d
 
 if ! [ -f ntp-dev-4.2.7p410.tar.gz ]; then
   wget http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-dev/ntp-dev-${VERSION}.tar.gz
