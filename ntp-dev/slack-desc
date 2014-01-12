@@ -1,11 +1,11 @@
-ntp-dev: ntp-dev (NTP stands for Network Time Protocol) 
-ntp-dev:
-ntp-dev: NTP stands for Network Time Protocol, and it is an Internet protocol 
-ntp-dev: used to synchronize the clocks of computers to some time reference. 
-ntp-dev: NTP is an Internet standard protocol originally developed by Professor 
-ntp-dev: David L. Mills at the University of Delaware.
-ntp-dev:
-ntp-dev: NTP version 4, a significant revision of the previous NTP standard, is 
-ntp-dev: the current development version. It is formalized by RFCs released by
-ntp-dev: the IETF.
-ntp-dev:
+ntp_dev: ntp_dev (NTP stands for Network Time Protocol) 
+ntp_dev:
+ntp_dev: NTP stands for Network Time Protocol, and it is an Internet protocol 
+ntp_dev: used to synchronize the clocks of computers to some time reference. 
+ntp_dev: NTP is an Internet standard protocol originally developed by Professor 
+ntp_dev: David L. Mills at the University of Delaware.
+ntp_dev:
+ntp_dev: NTP version 4, a significant revision of the previous NTP standard, is 
+ntp_dev: the current development version. It is formalized by RFCs released by
+ntp_dev: the IETF.
+ntp_dev:
