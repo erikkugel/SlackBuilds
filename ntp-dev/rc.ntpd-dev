@@ -28,7 +28,7 @@ ntpd_start() {
 ntpd_stop() {
   echo -n "Stopping NTP daemon..."
   if [ -r /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid ]; then
-    kill -HUP $(cat /var/run/ntpd.pid)
+    kill -HUP $(cat /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid)
     rm -f /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid
   else
     killall -HUP -q ntpd
