@@ -45,7 +45,7 @@ ntpd_restart() {
 
 # Check if ntpd is running
 ntpd_status() {
-  if [ -e /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid ]; then
+  if [ -e /opt/ntp-dev-${NTP_DEV_VER}/var/rund.pid ]; then
     echo "ntpd is running."
   else 
     echo "ntpd is stopped."

@@ -6,7 +6,7 @@ BUILD=1
 NTP_DEV_VER="4.2.7p410"
 BUILD_DIR="/tmp/build-$(date +%s)"
 
-mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/etc/ntp
+mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/etc ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/var/lib/ntp ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/var/run
 cat slack-desc > ${BUILD_DIR}/install/slack-desc
 sed "s/\${NTP_DEV_VER}/${NTP_DEV_VER}/g" ntp.conf > ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/etc/ntp.conf
 sed "s/\${NTP_DEV_VER}/${NTP_DEV_VER}/g" rc.ntpd-dev > ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
