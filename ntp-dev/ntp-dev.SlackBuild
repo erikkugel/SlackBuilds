@@ -1,28 +1,30 @@
-#!/bin/bash -e
+#!/bin/bash
 #
 # Ernest Kugel 2014/01/11
 
 BUILD=1
-VERSION=4.2.7p410
-BUILD_DIR=/tmp/build-$(date +%s)
+NTP_DEV_VER="4.2.7p410"
+BUILD_DIR="/tmp/build-$(date +%s)"
 
 mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d
-cp -vf slack-desc ${BUILD_DIR}/install
-cp -vf rc.ntpd-dev ${BUILD_DIR}/etc/rc.d
+cat slack-desc > ${BUILD_DIR}/install/slack-desc
+cat ntp.conf > ${BUILD_DIR}/etc/ntp.conf
+sed "s/\${NTP_DEV_VER}/${NTP_DEV_VER}/g" rc.ntpd-dev > ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
+chmod +x  ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
 
 if ! [ -f ntp-dev-4.2.7p410.tar.gz ]; then
-  wget http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-dev/ntp-dev-${VERSION}.tar.gz
+  wget http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-dev/ntp-dev-${NTP_DEV_VER}.tar.gz
 fi
-tar vxzf ntp-dev-${VERSION}.tar.gz
-cd ntp-dev-${VERSION}
-./configure --prefix=/opt/ntp-dev-${VERSION} --with-memlock
+tar vxzf ntp-dev-${NTP_DEV_VER}.tar.gz
+cd ntp-dev-${NTP_DEV_VER}
+./configure --prefix=/opt/ntp-dev-${NTP_DEV_VER} --with-memlock
 make V=99 || exit 1
 make check || exit 1
 make install DESTDIR=${BUILD_DIR} || exit 1
-rm -rf ../ntp-dev-${VERSION}
+rm -rf ../ntp-dev-${NTP_DEV_VER}
 
 cd ${BUILD_DIR}
-/sbin/makepkg -l y -c n /tmp/ntp-dev-${VERSION}-$(uname -m)-${BUILD}.txz
+/sbin/makepkg -l n -c n /tmp/ntp-dev-${NTP_DEV_VER}-$(uname -m)-${BUILD}.txz
 rm -rf ${BUILD_DIR}
 
 exit 0

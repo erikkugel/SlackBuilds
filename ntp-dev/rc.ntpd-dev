@@ -3,9 +3,9 @@
 
 # Start ntpd:
 ntpd_start() {
-  CMDLINE="/opt/ntp-dev-4.2.7p410/bin/ntpd -g"
+  CMDLINE="/opt/ntp-dev-${NTP_DEV_VER}/bin/ntpd -c /opt/ntp-dev-${NTP_DEV_VER}/etc/ntp.conf -g"
   echo -n "Starting NTP daemon:  $CMDLINE"
-  $CMDLINE -p /opt/ntp-dev-4.2.7p410/var/run/ntpd.pid
+  $CMDLINE -p /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid
   echo
   # The kernel is now mocking around with the the hardware clock if
   # ntpd is running, so if the hardware clock (wall clock) is set to
@@ -27,9 +27,9 @@ ntpd_start() {
 # Stop ntpd:
 ntpd_stop() {
   echo -n "Stopping NTP daemon..."
-  if [ -r /opt/ntp-dev-4.2.7p410/var/run/ntpd.pid ]; then
+  if [ -r /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid ]; then
     kill -HUP $(cat /var/run/ntpd.pid)
-    rm -f /opt/ntp-dev-4.2.7p410/var/run/ntpd.pid
+    rm -f /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid
   else
     killall -HUP -q ntpd
   fi
@@ -45,7 +45,7 @@ ntpd_restart() {
 
 # Check if ntpd is running
 ntpd_status() {
-  if [ -e /opt/ntp-dev-4.2.7p410/var/run/ntpd.pid ]; then
+  if [ -e /opt/ntp-dev-${NTP_DEV_VER}/var/run/ntpd.pid ]; then
     echo "ntpd is running."
   else 
     echo "ntpd is stopped."
