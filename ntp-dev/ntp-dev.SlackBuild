@@ -1,18 +1,18 @@
 #!/bin/bash
 #
-# Ernest Kugel 2014/01/11
+# Ernest Kugel 2014/01/12
 
 BUILD=1
 NTP_DEV_VER="4.2.7p410"
 BUILD_DIR="/tmp/build-$(date +%s)"
 
-mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d
+mkdir -pv ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/etc/ntp
 cat slack-desc > ${BUILD_DIR}/install/slack-desc
-cat ntp.conf > ${BUILD_DIR}/etc/ntp.conf
+sed "s/\${NTP_DEV_VER}/${NTP_DEV_VER}/g" ntp.conf > ${BUILD_DIR}/opt/ntp-dev-${NTP_DEV_VER}/etc/ntp.conf
 sed "s/\${NTP_DEV_VER}/${NTP_DEV_VER}/g" rc.ntpd-dev > ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
-chmod +x  ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
+chmod +x ${BUILD_DIR}/etc/rc.d/rc.ntpd-dev
 
-if ! [ -f ntp-dev-4.2.7p410.tar.gz ]; then
+if ! [ -f ntp-dev-${NTP_DEV_VER}.tar.gz ]; then
   wget http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-dev/ntp-dev-${NTP_DEV_VER}.tar.gz
 fi
 tar vxzf ntp-dev-${NTP_DEV_VER}.tar.gz
