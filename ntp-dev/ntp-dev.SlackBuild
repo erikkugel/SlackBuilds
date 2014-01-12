@@ -21,7 +21,7 @@ make install DESTDIR=${BUILD_DIR} || exit 1
 rm -rf ../ntp-dev-${VERSION}
 
 cd ${BUILD_DIR}
-/sbin/makepkg -l y -c n /tmp/ntp_dev-${VERSION}-$(uname -m)-${BUILD}.txz
+/sbin/makepkg -l y -c n /tmp/ntp-dev-${VERSION}-$(uname -m)-${BUILD}.txz
 rm -rf ${BUILD_DIR}
 
 exit 0
