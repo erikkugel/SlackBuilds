@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+APP_NAME=hipchat
+APP_URL=http://downloads.hipchat.com/linux/arch
+BUILD_DIR=/tmp/build-$(date +%s)
+TAG=1
+
+SLACK_DESC="   |-----handy-ruler------------------------------------------------------|
+$APP_NAME: $APP_NAME
+$APP_NAME: 
+$APP_NAME: Group chat and IM built for teams
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: 
+$APP_NAME: "
+
+mkdir -pv ${BUILD_DIR}/install
+wget -q -O - ${APP_URL}/${APP_NAME}-$(uname -m).tar.xz | tar -v -x -J -C ${BUILD_DIR} -f -
+
+APP_VER=$(grep ^pkgver ${BUILD_DIR}/.PKGINFO | sed -e 's/^.*\ =\ //g;s/-.*$//g')
+rm -f ${BUILD_DIR}/.PKGINFO
+
+cd ${BUILD_DIR}
+echo "${SLACK_DESC}" > ${BUILD_DIR}/install/slack-desc
+makepkg -l y -c n ../${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.tgz
+
+rm -rf ${BUILD_DIR}
