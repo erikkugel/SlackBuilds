@@ -16,9 +16,9 @@ cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 # Build
 mkdir ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
 cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
-cmake -DCMAKE_INSTALL_PREFIX=${BUILD_DIR} ../
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../
 make
-make install
+make install DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
