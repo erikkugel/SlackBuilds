@@ -8,18 +8,20 @@ APP_URL=http://download.kde.org/stable/yakuake/${APP_VER}/src/yakuake-${APP_VER}
 BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
 TAG=1
 
+# Download
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
 wget -q -O - ${APP_URL} | tar -v -x -J -C ${BUILD_DIR}/src -f -
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-exit
 
-
-mkdir ${BUILD_DIR}/src/build
-cd ${BUILD_DIR}/src/build
+# Build
+mkdir ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
+cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
 cmake -DCMAKE_INSTALL_PREFIX=${BUILD_DIR} ../
 make
 make install
+cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
-/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.tgz
 
+# Create package
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}
