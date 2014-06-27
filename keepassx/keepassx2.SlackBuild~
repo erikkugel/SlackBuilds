@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+APP_NAME="keepassx"
+APP_VER="2.0"
+APP_BUILD="alpha6"
+APP_URL="http://www.keepassx.org/dev/attachments/download/69/keepassx-${APP_VER}-${APP_BUILD}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${APP_NAME}-$(date +%s)"
+TAG="${APP_BUILD}"
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
+wget -q -O - ${APP_URL} | tar -v -x -J -C ${BUILD_DIR}/src -f -
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+
+# Build
+mkdir ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
+cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../
+make
+make install DESTDIR=${BUILD_DIR}
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}

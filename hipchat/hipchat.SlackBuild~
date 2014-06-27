@@ -15,6 +15,6 @@ APP_VER=$(grep ^pkgver ${BUILD_DIR}/.PKGINFO | sed -e 's/^.*\ =\ //g;s/-.*$//g')
 rm -v -f ${BUILD_DIR}/.PKGINFO
 
 cd ${BUILD_DIR}
-makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz
+makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.tgz
 
 rm -v -r -f ${BUILD_DIR}
