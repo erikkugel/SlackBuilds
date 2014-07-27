@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+APP_NAME="djmount"
+APP_VER="0.71"
+APP_URL=http://downloads.sourceforge.net/project/${APP_NAME}/${APP_NAME}/${APP_VER}/${APP_NAME}-${APP_VER}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+TAG=1
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f -
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+
+# Build
+cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
+./configure --prefix=/usr/local
+make
+make install DESTDIR=${BUILD_DIR}
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
