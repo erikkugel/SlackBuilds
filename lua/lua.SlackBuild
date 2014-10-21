@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+APP_NAME="lua"
+APP_VER="5.2.3"
+http://www.lua.org/ft/lua-5.2.3.tar.gz
+APP_URL=http://www.lua.org/ftp/${APP_NAME}-${APP_VER}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+TAG=1
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
+wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+
+# Build
+mkdir ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
+cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
+make linux install MYLIBS=-ltermcap INSTALL_TOP=${BUILD_DIR} || exit 1
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz || exit 1
+rm -v -r -f ${BUILD_DIR}
