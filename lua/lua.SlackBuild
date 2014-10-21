@@ -4,7 +4,6 @@
 
 APP_NAME="lua"
 APP_VER="5.2.3"
-http://www.lua.org/ft/lua-5.2.3.tar.gz
 APP_URL=http://www.lua.org/ftp/${APP_NAME}-${APP_VER}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
 TAG=1
