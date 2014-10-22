@@ -9,14 +9,13 @@ BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
 TAG=1
 
 # Download
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
 wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
 # Build
-mkdir ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
 cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
-make linux install MYLIBS=-ltermcap INSTALL_TOP=${BUILD_DIR} || exit 1
+make linux install MYLIBS=-ltermcap INSTALL_TOP=${BUILD_DIR}/usr/local || exit 1
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
