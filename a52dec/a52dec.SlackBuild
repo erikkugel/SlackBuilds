@@ -2,10 +2,9 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME="lua"
-APP_VER="5.2.3"
-LUA_V="5.2"
-APP_URL=http://www.lua.org/ftp/${APP_NAME}-${APP_VER}.tar.gz
+APP_NAME="a52dec"
+APP_VER="0.7.4"
+APP_URL=http://liba52.sourceforge.net/files/${APP_NAME}-${APP_VER}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
 TAG=1
 
@@ -19,20 +18,17 @@ fi
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
 wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-#cp -v -f ./Makefile ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/src/Makefile
-#cp -v -f ./Makefile.main ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}/Makefile
 
 # Build
 cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
 export CFLAGS="-fPIC"
-export CPPFLAGS="-fPIC" 
-#export CXXFLAGS="-fPIC"
+./configure \
+	--prefix=/usr/local \
+	--libdir=/usr/local/lib${ARCH_SUFFIX} \
+	--enable-shared \
+	--with-pic || exit 1
 
-make linux install \
-	MYLIBS=-ltermcap \
-	INSTALL_TOP=${BUILD_DIR}/usr/local \
-	INSTALL_LIB=${BUILD_DIR}/usr/local/lib${ARCH_SUFFIX} \
-	INSTALL_CMOD=${BUILD_DIR}/usr/local/lib${ARCH_SUFFIX}/lua/${LUA_V} || exit 1
+make install DESTDIR=${BUILD_DIR} || exit 1
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 

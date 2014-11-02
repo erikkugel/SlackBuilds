@@ -1,0 +1,11 @@
+a52dec: liba52
+a52dec: 
+a52dec: liba52 is a free library for decoding ATSC A/52 streams. It is 
+a52dec: released under the terms of the GPL license. The A/52 standard 
+a52dec: is used in a variety of applications, including digital television 
+a52dec: and DVD. It is also known as AC-3.
+a52dec: 
+a52dec: 
+a52dec: 
+a52dec: 
+a52dec: (http://liba52.sourceforge.net/)
