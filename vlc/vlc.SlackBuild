@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+APP_NAME="vlc"
+APP_VER="latest"
+#APP_URL=http://download.videolan.org/pub/videolan/${APP_NAME}/${APP_VER}/${APP_NAME}-${APP_VER}.tar.xz
+APP_URL=git://git.videolan.org/${APP_NAME}.git
+BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+TAG=1
+
+if [ "$(uname -m)" == "x86_64" ]; then
+        ARCH_SUFFIX="64"
+else
+        ARCH_SUFFIX=""
+fi
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cd ${BUILD_DIR}/src
+#wget ${APP_URL} -O - | tar -v -x -J -C ${BUILD_DIR}/src -f - || exit 1 
+git clone ${APP_URL} --depth 1
+
+# Build
+cd ${BUILD_DIR}/src/${APP_NAME}
+./bootstrap
+./configure \
+	--prefix=/usr/local \
+	--libdir=/usr/local/lib${ARCH_SUFFIX} || exit 1
+
+make install DESTDIR=${BUILD_DIR} || exit 1
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz || exit 1
+rm -v -r -f ${BUILD_DIR}
