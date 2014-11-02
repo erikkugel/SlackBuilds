@@ -2,17 +2,17 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME="vlc"
-APP_VER="latest"
-#APP_URL=http://download.videolan.org/pub/videolan/${APP_NAME}/${APP_VER}/${APP_NAME}-${APP_VER}.tar.xz
-APP_URL=git://git.videolan.org/${APP_NAME}.git
-BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+PRGNAM="vlc"
+VERSION="latest"
+#APP_URL=http://download.videolan.org/pub/videolan/${PRGNAM}/${VERSION}/${PRGNAM}-${VERSION}.tar.xz
+APP_URL=git://git.videolan.org/${PRGNAM}.git
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
 if [ "$(uname -m)" == "x86_64" ]; then
-        ARCH_SUFFIX="64"
+        LIBDIRSUFFIX="64"
 else
-        ARCH_SUFFIX=""
+        LIBDIRSUFFIX=""
 fi
 
 # Download
@@ -23,16 +23,16 @@ cd ${BUILD_DIR}/src
 git clone ${APP_URL} --depth 1
 
 # Build
-cd ${BUILD_DIR}/src/${APP_NAME}
+cd ${BUILD_DIR}/src/${PRGNAM}
 ./bootstrap
 ./configure \
 	--prefix=/usr/local \
-	--libdir=/usr/local/lib${ARCH_SUFFIX} || exit 1
+	--libdir=/usr/local/lib${LIBDIRSUFFIX} || exit 1
 
 make install DESTDIR=${BUILD_DIR} || exit 1
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz || exit 1
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz || exit 1
 rm -v -r -f ${BUILD_DIR}

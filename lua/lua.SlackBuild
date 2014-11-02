@@ -2,17 +2,19 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME="lua"
-APP_VER="5.2.3"
+PRGNAM="lua"
+VERSION="5.2.3"
 LUA_V="5.2"
-APP_URL=http://www.lua.org/ftp/${APP_NAME}-${APP_VER}.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+APP_URL=http://www.lua.org/ftp/${PRGNAM}-${VERSION}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
 if [ "$(uname -m)" == "x86_64" ]; then
-	ARCH_SUFFIX="64"
+	LIBDIRSUFFIX="64"
+	export CFLAGS="-fPIC"
+	export CPPFLAGS="-fPIC"
 else
-	ARCH_SUFFIX=""
+	LIBDIRSUFFIX=""
 fi  
 
 # Download
@@ -21,18 +23,15 @@ wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
 # Build
-cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
-export CFLAGS="-fPIC"
-export CPPFLAGS="-fPIC" 
-
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 make linux install \
 	MYLIBS=-ltermcap \
 	INSTALL_TOP=${BUILD_DIR}/usr/local \
-	INSTALL_LIB=${BUILD_DIR}/usr/local/lib${ARCH_SUFFIX} \
-	INSTALL_CMOD=${BUILD_DIR}/usr/local/lib${ARCH_SUFFIX}/lua/${LUA_V} || exit 1
+	INSTALL_LIB=${BUILD_DIR}/usr/local/lib${LIBDIRSUFFIX} \
+	INSTALL_CMOD=${BUILD_DIR}/usr/local/lib${LIBDIRSUFFIX}/lua/${LUA_V} || exit 1
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz || exit 1
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz || exit 1
 rm -v -r -f ${BUILD_DIR}

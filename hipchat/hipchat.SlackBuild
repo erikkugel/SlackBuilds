@@ -2,19 +2,19 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME=hipchat
+PRGNAM=hipchat
 APP_URL=http://downloads.hipchat.com/linux/arch/hipchat-$(uname -m).tar.xz
-BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
 mkdir -v -p ${BUILD_DIR}/install
 wget -q -O - ${APP_URL} | tar -v -x -J -C ${BUILD_DIR} -f -
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
-APP_VER=$(grep ^pkgver ${BUILD_DIR}/.PKGINFO | sed -e 's/^.*\ =\ //g;s/-.*$//g')
+VERSION=$(grep ^pkgver ${BUILD_DIR}/.PKGINFO | sed -e 's/^.*\ =\ //g;s/-.*$//g')
 rm -v -f ${BUILD_DIR}/.PKGINFO
 
 cd ${BUILD_DIR}
-makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz
+makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 
 rm -v -r -f ${BUILD_DIR}

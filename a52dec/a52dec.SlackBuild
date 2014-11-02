@@ -2,16 +2,17 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME="a52dec"
-APP_VER="0.7.4"
-APP_URL=http://liba52.sourceforge.net/files/${APP_NAME}-${APP_VER}.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+PRGNAM="a52dec"
+VERSION="0.7.4"
+APP_URL=http://liba52.sourceforge.net/files/${PRGNAM}-${VERSION}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
 if [ "$(uname -m)" == "x86_64" ]; then
-	ARCH_SUFFIX="64"
+	LIBDIRSUFFIX="64"
+	export CFLAGS="-fPIC"
 else
-	ARCH_SUFFIX=""
+	LIBDIRSUFFIX=""
 fi  
 
 # Download
@@ -20,11 +21,10 @@ wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
 # Build
-cd ${BUILD_DIR}/src/${APP_NAME}-${APP_VER}
-export CFLAGS="-fPIC"
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 ./configure \
 	--prefix=/usr/local \
-	--libdir=/usr/local/lib${ARCH_SUFFIX} \
+	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
 	--enable-shared \
 	--with-pic || exit 1
 
@@ -33,5 +33,5 @@ cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.txz || exit 1
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz || exit 1
 rm -v -r -f ${BUILD_DIR}

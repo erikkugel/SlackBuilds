@@ -2,10 +2,10 @@
 #
 # Ernest Kugel, 2014
 
-APP_NAME=awscli
-APP_VER=1.3.18
+PRGNAM=awscli
+VERSION=1.3.18
 APP_URL=https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
-BUILD_DIR=/tmp/SlackBuild-${APP_NAME}-$(date +%s)
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/tmp
@@ -19,6 +19,6 @@ cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 
 
 cd ${BUILD_DIR}
-/sbin/makepkg -l n -c n /tmp/${APP_NAME}-${APP_VER}-$(uname -m)-${TAG}.tgz
+/sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.tgz
 
 #rm -v -r -f ${BUILD_DIR}
