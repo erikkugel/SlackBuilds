@@ -9,18 +9,25 @@ APP_URL=git://git.videolan.org/${PRGNAM}.git
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
-if [ "$(uname -m)" == "x86_64" ]; then
+if [ "$(getconf LONG_BIT)" == "64" ]; then
         LIBDIRSUFFIX="64"
 else
         LIBDIRSUFFIX=""
 fi
 
-# Download
+# Clone/Pull latest
+if [ -d ./${PRGNAM}/.git ]; then
+        cd ./${PRGNAM}
+        git pull
+        cd ..
+else
+        rm -rfv ./${PRGNAM}
+        git clone ${APP_URL} ${PRGNAM}
+fi
+
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-cd ${BUILD_DIR}/src
-#wget ${APP_URL} -O - | tar -v -x -J -C ${BUILD_DIR}/src -f - || exit 1 
-git clone ${APP_URL} --depth 1
+cp -aRpf ${PRGNAM} ${BUILD_DIR}/src
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}
