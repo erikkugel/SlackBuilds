@@ -21,3 +21,4 @@ cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cd ${BUILD_DIR}
 chown -R root:root .
 makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -r -f ${BUILD_DIR}
