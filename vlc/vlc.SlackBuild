@@ -8,6 +8,7 @@ VERSION="latest"
 APP_URL=git://git.videolan.org/${PRGNAM}.git
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
+set -e
 
 if [ "$(getconf LONG_BIT)" == "64" ]; then
         LIBDIRSUFFIX="64"
@@ -35,12 +36,12 @@ chown -Rc root:root .
 ./bootstrap
 ./configure \
 	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX} || exit 1
+	--libdir=/usr/local/lib${LIBDIRSUFFIX}
 
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99 || exit 1
+make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz || exit 1
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}

@@ -2,3 +2,6 @@
 ffmpeg/ffmpeg/
 vlc/vlc/
 flash_player/install_flash_player_*_linux.*.tar.gz
+x264/x264
+xvid/xvidcore
+xvid/xvidextra
