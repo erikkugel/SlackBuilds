@@ -28,6 +28,7 @@ fi
 
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
 
 # Build
