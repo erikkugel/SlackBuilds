@@ -1,9 +1,10 @@
 *~
-a52dec/a52dec-*.tar.gz
+*.tar.gz
+*/.svn
+*/.git
 ffmpeg/ffmpeg/
 vlc/vlc/
-flash_player/install_flash_player_*_linux.*.tar.gz
 x264/x264
 xvidcore/xvidcore
 xvidcore/xvidextra
-xvidcore/.svn
+
