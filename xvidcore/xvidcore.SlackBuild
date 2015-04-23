@@ -2,7 +2,7 @@
 #
 # Ernest Kugel, 2014
 
-PRGNAM="xvid"
+PRGNAM="xvidcore"
 VERSION="latest"
 APP_URL=http://svn.xvid.org/trunk
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
@@ -19,15 +19,15 @@ fi
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-if [ -d src/xvidcore ]; then
+if [ -d ./.svn ]; then
 	svn update --username anonymous --password '' --non-interactive .
 else
 	svn checkout ${APP_URL} --username anonymous --password '' --non-interactive .
 fi
-cp -v -a -R -p -f ./xvidcore ${BUILD_DIR}/src/xvidcore
+cp -v -a -R -p -f ${PRGNAM} ${BUILD_DIR}/src/${PRGNAM}
 
 # Build
-cd ${BUILD_DIR}/src/xvidcore/build/generic
+cd ${BUILD_DIR}/src/${PRGNAM}/build/generic
 ./bootstrap.sh
 ./configure \
 	--prefix=/usr/local \
@@ -39,7 +39,7 @@ cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 
 # Clean up
 rm -v -r -f ${BUILD_DIR}

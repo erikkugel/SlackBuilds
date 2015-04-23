@@ -8,6 +8,8 @@ APP_URL=http://liba52.sourceforge.net/files/${PRGNAM}-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 
+set -e
+
 if [ "$(uname -m)" == "x86_64" ]; then
 	LIBDIRSUFFIX="64"
 	export CFLAGS="-fPIC"
@@ -17,8 +19,9 @@ fi
 
 # Download
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
-wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f - || exit 1
+wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f -
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
@@ -26,12 +29,12 @@ cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 	--prefix=/usr/local \
 	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
 	--enable-shared \
-	--with-pic || exit 1
+	--with-pic
 
-make install DESTDIR=${BUILD_DIR} || exit 1
+make install DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz || exit 1
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}

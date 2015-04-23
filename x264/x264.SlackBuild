@@ -36,12 +36,13 @@ cd ${BUILD_DIR}/src/${PRGNAM}
 chown -Rc root:root .
 ./configure \
 	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX}
+	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
+	--enable-shared
 
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}

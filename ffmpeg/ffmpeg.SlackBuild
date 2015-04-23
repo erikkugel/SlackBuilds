@@ -29,9 +29,7 @@ fi
 # Prepare
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-if [ -f ./doinst.sh ]; then
-	cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-fi
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
 
 # Build
@@ -48,5 +46,5 @@ cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txzg
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txzg
 rm -v -r -f ${BUILD_DIR}
