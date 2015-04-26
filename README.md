@@ -9,15 +9,15 @@ Written and maintained by Ernest Kugel (erik dot kugel at gmail dot com)
 Traditional slackbuilds such as SlackBuilds.org are usually for stable software releases and stable Slackware. If you'd like to use the latest source code instead, usually directly from srouce controll, or if you need something that works with rolling Slackware release, this is the place for you.
 
 # What's here?
-- Latest VLC built as an HTTP daemon with all the init scripts you'll need.
-- Lua without shared libs (as Lua recommends!), which defaults to 5.1.5 to support VLC, but which was tested to build up to 5.3.0 as well.
+- Latest VLC built as an HTTP daemon, with a dedicated system user, and with System-V init scripts
+- Lua without shared libs, with position independent code (as Lua recommends!). Defaults to version 5.1.5 to support VLC, but was tested to build up to version 5.3.0 as well
 - FFmpeg which will install and play nice with VLC
 - x264 from source control
 - xvidxode from source crontol
 - a52 decoder version 0.7.2 with shared libs
 - DavMail MS Exchange Gateway client
 - HipChat client for Atlassian chat platform
-- Flash Player from Adobe packager
+- Adobe Flash Player package builder
 - More!
 
 # Instructions  
