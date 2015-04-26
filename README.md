@@ -6,7 +6,7 @@ SlackBuilds for Slackware Linux
 Written and maintained by Ernest Kugel (erik dot kugel at gmail dot com)
 
 # Why is this here?
-Traditional slackbuilds such as SlackBuilds.org are usually for stable software releases and stable Slackware. If you'd like to use the latest source code instead, usually directly from srouce controll, or if you need something that works with rolling Slackware release, this is the place for you.
+Traditional slackbuilds such as SlackBuilds.org are usually for stable software releases and stable Slackware releases. This repository is meant to supplement those: if you'd like to use the latest source code instead, usually directly from srouce controll, or if you need something that works with rolling Slackware release, or if you need something you cannot find through more traditional channels, this is the place for you.
 
 # What's here?
 - Latest VLC built as an HTTP daemon, with a dedicated system user, and with System-V init scripts
