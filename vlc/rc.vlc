@@ -10,16 +10,16 @@ vlc_start() {
     --http-port ${VLC_PORT} 
     --http-password=${VLC_PASSWORD}"
   echo "Starting VLC daemon, listening at ${VLC_HOST}:${VLC_PORT}"
-  sudo -s -u ${VLC_USER} $CMDLINE --pidfile /var/run/vlc.pid
+  sudo -s -u ${VLC_USER} $CMDLINE --pidfile /var/run/vlc/vlc.pid
   echo
 }
 
 # Stop vlc:
 vlc_stop() {
   echo -n "Stopping VLC daemon..."
-  if [ -r /var/run/vlc.pid ]; then
-    kill -HUP $(cat /var/run/vlc.pid)
-    rm -f /var/run/vlc.pid
+  if [ -r /var/run/vlc/vlc.pid ]; then
+    kill -HUP $(cat /var/run/vlc/vlc.pid)
+    rm -f /var/run/vlc/vlc.pid
   else
     killall -HUP -q vlc
   fi
@@ -35,7 +35,7 @@ vlc_restart() {
 
 # Check if vlc is running
 vlc_status() {
-  if [ -e /var/run/vlc.pid ]; then
+  if [ -e /var/run/vlc/vlc.pid ]; then
     echo "vlc is running."
   else 
     echo "vlc is stopped."
