@@ -5,5 +5,5 @@ else
 fi
 /sbin/ldconfig -v -n /usr/local/lib${LIBDIRSUFFIX} )
 ( if [ -z "$(getent passwd vlc)" ]; then
-	/usr/sbin/useradd vlc -m
+	/usr/sbin/useradd vlc -m -U -G audio,video
 fi )
