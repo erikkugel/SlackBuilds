@@ -3,8 +3,8 @@
 # Ernest Kugel, 2014
 
 PRGNAM="lua"
-VERSION="5.3.0"
-LUA_V="5.3"
+VERSION="5.1.0"
+LUA_V="5.1"
 APP_URL=http://www.lua.org/ftp/${PRGNAM}-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
@@ -13,8 +13,8 @@ set -e
 
 if [ "$(getconf LONG_BIT)" == "64" ]; then
 	LIBDIRSUFFIX="64"
-	#export CFLAGS="-fPIC"
-	#export CPPFLAGS="-fPIC"
+	export CFLAGS="-fPIC"
+	export CPPFLAGS="-fPIC"
 else
 	LIBDIRSUFFIX=""
 fi  
@@ -23,7 +23,6 @@ fi
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
 wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f -
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
