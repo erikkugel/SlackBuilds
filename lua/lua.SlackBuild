@@ -3,7 +3,7 @@
 # Ernest Kugel, 2014
 
 PRGNAM="lua"
-VERSION="5.1.0"
+VERSION="5.1.5"
 LUA_V="5.1"
 APP_URL=http://www.lua.org/ftp/${PRGNAM}-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
