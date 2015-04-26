@@ -27,9 +27,11 @@ else
         git clone ${APP_URL} ${PRGNAM}
 fi
 
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/usr/local
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v -f ./rc.vlc ${BUILD_DIR}/etc/rc.d/rc.vlc
+cp -v -f ./rc.vlc.conf ${BUILD_DIR}/etc/rc.d/rc.vlc.conf
 cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
 
 # Build
