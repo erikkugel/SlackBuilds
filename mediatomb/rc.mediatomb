@@ -1,0 +1,61 @@
+#!/bin/sh
+# Start/stop/restart mediatomb.
+source /etc/rc.d/rc.mediatomb.conf
+
+# Start mediatomb:
+mediatomb_start() {
+  CMDLINE="/usr/local/bin/mediatomb --daemon 
+    --ip ${MEDIATOMB_HOST}
+    --port ${MEDIATOMB_PORT} 
+    --user ${MEDIATOMB_USER}
+    --group ${MEDIATOMB_GROUP}"
+  echo "Starting MediaTomb daemon, listening at ${MEDIATOMB_HOST}:${MEDIATOMB_PORT}"
+  ${MEDIATOMB_USER} $CMDLINE --pidfile /var/run/mediatomb/mediatomb.pid
+  echo
+}
+
+# Stop mediatomb:
+mediatomb_stop() {
+  echo -n "Stopping MEDIATOMB daemon..."
+  if [ -r /var/run/mediatomb/mediatomb.pid ]; then
+    kill -HUP $(cat /var/run/mediatomb/mediatomb.pid)
+    rm -f /var/run/mediatomb/mediatomb.pid
+  else
+    killall -HUP -q mediatomb
+  fi
+  echo
+}
+
+# Restart mediatomb:
+mediatomb_restart() {
+  mediatomb_stop
+  sleep 1
+  mediatomb_start
+}
+
+# Check if mediatomb is running
+mediatomb_status() {
+  if [ -e /var/run/mediatomb/mediatomb.pid ]; then
+    echo "mediatomb is running."
+  else 
+    echo "mediatomb is stopped."
+    exit 1
+  fi
+}
+
+case "$1" in
+'start')
+  mediatomb_start
+  ;;
+'stop')
+  mediatomb_stop
+  ;;
+'restart')
+  mediatomb_restart
+  ;;
+'status')
+  mediatomb_status
+  ;;
+*)
+  echo "usage $0 start|stop|restart|status"
+esac
