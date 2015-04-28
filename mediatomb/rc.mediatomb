@@ -5,14 +5,9 @@ source /etc/rc.d/rc.mediatomb.conf
 # Start mediatomb:
 mediatomb_start() {
   CMDLINE="/usr/local/bin/mediatomb --daemon 
-<<<<<<< HEAD
     --ip ${MEDIATOMB_IP}
     --port ${MEDIATOMB_PORT}
     --home ${MEDIATOMB_HOME}
-=======
-    --ip ${MEDIATOMB_HOST}
-    --port ${MEDIATOMB_PORT} 
->>>>>>> a1094b498ea5deb9cee847d847b145b00fc9b49f
     --user ${MEDIATOMB_USER}
     --group ${MEDIATOMB_GROUP}"
   echo "Starting MediaTomb daemon, listening at ${MEDIATOMB_HOST}:${MEDIATOMB_PORT}"
