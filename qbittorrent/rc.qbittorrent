@@ -3,8 +3,8 @@
 
 # Start qbittorrent:
 qbittorrent_start() {
-  echo "y" | sudo -u qbittorrent /usr/local/bin/qbittorrent-nox -d --webui-port=8080 &
-  echo $! > /var/run/qbittorrent/qbittorrent.pid
+  echo "y" | sudo -u qbittorrent /usr/local/bin/qbittorrent-nox -d -webui-port=8080
+  pgrep qbittorrent-nox > /var/run/qbittorrent/qbittorrent.pid
   echo "Starting qBitTorrent daemon..."
   echo
 }
