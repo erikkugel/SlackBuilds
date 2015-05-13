@@ -3,7 +3,7 @@
 
 # Start qbittorrent:
 qbittorrent_start() {
-  CMDLINE="su - qbittorrent -c '/usr/local/bin/qbittorrent-nox --with-port=8080'"
+  CMDLINE="su - qbittorrent -c '/usr/local/bin/qbittorrent-nox -d --with-port=8080'"
   $CMDLINE & echo $! > /var/run/qbittorent/qbittorrent.pid
   echo "Starting qBitTorrent daemon..."
   echo
