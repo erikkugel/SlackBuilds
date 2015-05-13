@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Start/stop/restart mediatomb.
 source /etc/rc.d/rc.mediatomb.conf
 
