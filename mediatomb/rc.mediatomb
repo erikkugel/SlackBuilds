@@ -11,7 +11,7 @@ mediatomb_start() {
     --user ${MEDIATOMB_USER}
     --group ${MEDIATOMB_GROUP}"
   echo "Starting MediaTomb daemon, listening at ${MEDIATOMB_HOST}:${MEDIATOMB_PORT}"
-  ${MEDIATOMB_USER} $CMDLINE --pidfile /var/run/mediatomb/mediatomb.pid
+  $CMDLINE --pidfile /var/run/mediatomb/mediatomb.pid
   echo
 }
 
