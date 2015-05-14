@@ -1,0 +1,56 @@
+#!/bin/bash
+# Start/stop/restart nrsysmond.
+
+# Start nrsysmond:
+nrsysmond_start() {
+  /usr/local/bin/nrsysmond -c /etc/newrelic/nrsysmond.cfg
+  pgrep nrsysmond > /var/run/nrsysmond/nrsysmond.pid
+  echo "Starting New Relic Server Monitor..."
+  echo
+}
+
+# Stop nrsysmond:
+nrsysmond_stop() {
+  echo -n "Stopping New Relic Server Monitor..."
+  if [ -r /var/run/nrsysmond/nrsysmond.pid ]; then
+    kill -HUP $(cat /var/run/nrsysmond/nrsysmond.pid)
+    rm -f /var/run/nrsysmond/nrsysmond.pid
+  else
+    killall -HUP -q nrsysmond
+  fi
+  echo
+}
+
+# Restart nrsysmond:
+nrsysmond_restart() {
+  nrsysmond_stop
+  sleep 1
+  nrsysmond_start
+}
+
+# Check if nrsysmond is running
+nrsysmond_status() {
+  if [ -e /var/run/nrsysmond/nrsysmond.pid ]; then
+    echo "nrsysmond is running."
+  else 
+    echo "nrsysmond is stopped."
+    exit 1
+  fi
+}
+
+case "$1" in
+'start')
+  nrsysmond_start
+  ;;
+'stop')
+  nrsysmond_stop
+  ;;
+'restart')
+  nrsysmond_restart
+  ;;
+'status')
+  nrsysmond_status
+  ;;
+*)
+  echo "usage $0 start|stop|restart|status"
+esac
