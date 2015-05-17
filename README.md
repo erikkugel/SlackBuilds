@@ -15,6 +15,9 @@ Traditional slackbuilds such as SlackBuilds.org are usually for stable software 
 - x264 from source control
 - xvidxode from source crontol
 - a52 decoder version 0.7.2 with shared libs
+- rtorrent for qBitTorrent
+- qBitTorrent from source running headless as daemon
+- MediaTomb from source running headless as daemon
 - DavMail MS Exchange Gateway client
 - HipChat client for Atlassian chat platform
 - Adobe Flash Player package builder
