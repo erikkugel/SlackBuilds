@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# Ernest Kugel, July 2015
+
+PRGNAM="hostapd"
+VERSION="2.4"
+APP_URL=https://w1.fi/releases/${PRGNAM}-${VERSION}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1
+
+set -e
+
+if [ "$(uname -m)" == "x86_64" ]; then
+	LIBDIRSUFFIX="64"
+else
+	LIBDIRSUFFIX=""
+fi
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR} ${BUILD_DIR}/src
+if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
+	wget -q ${APP_URL}
+fi
+tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tar.gz
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/hostapd
+make install DESTDIR=${BUILD_DIR} -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
+mkdir -v -p ${BUILD_DIR}/etc/hostapd ${BUILD_DIR}/usr/local/man/man1 ${BUILD_DIR}/usr/local/man/man8 
+
+cp -v -f wps-ap-nfc.py ${BUILD_DIR}/usr/local/bin
+
+cp -v -f hostapd.conf ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.accept ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.deny ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.eap_user ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.eap_user_sqlite ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.radius_clients ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.sim_db ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.vlan ${BUILD_DIR}/etc/hostapd
+cp -v -f hostapd.wpa_psk ${BUILD_DIR}/etc/hostapd
+cp -v -f wired.conf ${BUILD_DIR}/etc/hostapd
+
+gzip -v -c hostapd_cli.1 > ${BUILD_DIR}/usr/local/man/man1/hostapd_cli.1.gz
+gzip -v -c hostapd.8 > ${BUILD_DIR}/usr/local/man/man8/hostapd.8.gz
+
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
