@@ -1,0 +1,11 @@
+shorewall-core: Shorewall Core
+shorewall-core: 
+shorewall-core: Shorewall is a gateway/firewall configuration tool for GNU/Linux.
+shorewall-core: 
+shorewall-core: Note that you must install Shorewall-core before installing any
+shorewall-core: other Shorewall package.
+shorewall-core: 
+shorewall-core: 
+shorewall-core: 
+shorewall-core: 
+shorewall-core: (http://shorewall.net/)

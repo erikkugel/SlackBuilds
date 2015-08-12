@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# Ernest Kugel, July 2015
+
+PRGNAM="shorewall"
+VERSION="4.6.11.1"
+APP_URL=http://www.shorewall.org/pub/shorewall/4.6/shorewall-4.6.11/${PRGNAM}-${VERSION}.tgz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1
+
+set -e
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+if ! [ -f ${PRGNAM}-${VERSION}.tgz ]; then
+	wget ${APP_URL}
+fi
+tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tgz
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v -f ./shorewallrc ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/shorewallrc
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+DESTDIR=${BUILD_DIR} ./install.sh ./shorewallrc
+
+cd ${BUILD_DIR}
+find ./etc/shorewall -type f -exec mv {} {}.new \;
+mv -v -f ./etc/logrotate.d/shorewall ./etc/logrotate.d/shorewall.new
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+
+rm -v -r -f ${BUILD_DIR}
