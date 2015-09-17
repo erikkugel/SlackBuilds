@@ -32,6 +32,7 @@ cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/hostapd
 
 cat defconfig > .config
 sed -i 's/^#CONFIG_IEEE80211N=[ny]/CONFIG_IEEE80211N=y/' .config
+sed -i 's/^#CONFIG_ACS=[ny]/CONFIG_ACS=y/' .config
 
 make install DESTDIR=${BUILD_DIR} -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
 mkdir -v -p ${BUIDL_DIR}/usr/local/bin ${BUILD_DIR}/etc/hostapd ${BUILD_DIR}/usr/local/man/man1 ${BUILD_DIR}/usr/local/man/man8 
