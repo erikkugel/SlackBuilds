@@ -1,0 +1,51 @@
+#!/bin/sh
+# Start/stop/restart tor.
+
+# Start tor:
+tor_start() {
+  CMDLINE="/usr/local/bin/tor -f /etc/tor/torrc"
+  echo "Starting TOR daemon..."
+  sudo -s -u ${TOR_USER} ${CMDLINE }
+  echo
+}
+
+# Stop tor:
+tor_stop() {
+  echo -n "Stopping TOR daemon..."
+  killall -HUP -q tor
+  echo
+}
+
+# Restart tor:
+tor_restart() {
+  tor_stop
+  sleep 1
+  tor_start
+}
+
+# Check if tor is running
+tor_status() {
+  if ! [ -z "$(ps aux | grep tor | grep -v grep)" ]; then
+    echo "tor is running."
+  else 
+    echo "tor is stopped."
+    exit 1
+  fi
+}
+
+case "$1" in
+'start')
+  tor_start
+  ;;
+'stop')
+  tor_stop
+  ;;
+'restart')
+  tor_restart
+  ;;
+'status')
+  tor_status
+  ;;
+*)
+  echo "usage $0 start|stop|restart|status"
+esac
