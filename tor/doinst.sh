@@ -18,7 +18,3 @@ chown -c -R tor:tor /usr/local/var/lib/tor )
 	mkdir -v -p /usr/local/var/log/tor
 fi 
 chown -c -R tor:tor /usr/local/var/log/tor )
-( if [ ! -d /usr/local/var/lib/tor ]; then
-	mkdir -v -p /usr/local/var/lib/tor 
-fi 
-chown -c -R tor:tor /usr/local/var/lib/tor )
