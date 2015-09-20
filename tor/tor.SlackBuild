@@ -27,7 +27,7 @@ cp -v -f ./rc.tor ${BUILD_DIR}/etc/rc.d/rc.tor
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
-./configure --prefix=/usr/local --libdir=/usr/local/lib${LIBDIRSUFFIX} --sysconfdir=/etc
+./configure --prefix=/usr/local --libdir=/usr/local/lib${LIBDIRSUFFIX}
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
 cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src

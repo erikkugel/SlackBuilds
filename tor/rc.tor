@@ -1,18 +1,26 @@
 #!/bin/sh
 # Start/stop/restart tor.
+TOR_USER="tor"
 
 # Start tor:
 tor_start() {
-  CMDLINE="/usr/local/bin/tor -f /etc/tor/torrc"
+  CMDLINE="/usr/local/bin/tor -f /usr/local/etc/tor/torrc"
   echo "Starting TOR daemon..."
-  sudo -s -u ${TOR_USER} ${CMDLINE }
+  sudo -s -u ${TOR_USER} ${CMDLINE}
   echo
 }
 
 # Stop tor:
 tor_stop() {
   echo -n "Stopping TOR daemon..."
-  killall -HUP -q tor
+  killall -SIGINT -q tor
+  echo
+}
+
+# Reload tor:
+tor_reload() {
+  echo -n "Reloading TOR daemon..."
+  killall -SIGHUP -q tor
   echo
 }
 
@@ -25,8 +33,11 @@ tor_restart() {
 
 # Check if tor is running
 tor_status() {
-  if ! [ -z "$(ps aux | grep tor | grep -v grep)" ]; then
-    echo "tor is running."
+  PID=$(ps -o pid= -C tor)
+  if ! [ -z "${PID}" ]; then
+    echo "tor is running with PID ${PID} ..."
+    killall -SIGUSR1 -q tor
+    exit 0
   else 
     echo "tor is stopped."
     exit 1
