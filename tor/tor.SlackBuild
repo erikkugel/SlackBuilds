@@ -33,5 +33,5 @@ cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}
