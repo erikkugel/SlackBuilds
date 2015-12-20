@@ -3,41 +3,19 @@
 # Ernest Kugel, 2014
 
 PRGNAM="libtorrent"
-VERSION="1.0.5"
-APP_URL=http://downloads.sourceforge.net/project/libtorrent/libtorrent/libtorrent-rasterbar-1.0.5.tar.gz
+VERSION="1.0.7"
+APP_URL=https://github.com/arvidn/libtorrent.git
+GIT_TAG="libtorrent-1_0_7"
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+TAG="1"
 
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
-else
-        LIBDIRSUFFIX=""
-fi
+source ../functions.sh
 
 # Clone/Pull latest
-if ! [ -f libtorrent-rasterbar-${PRGNAM}.tar.gz ]; then
-  wget -nc ${APP_URL}
-fi
+git-pull ${PRGNAM} ${APP_URL} ${GIT_TAG}
 
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-tar -v -x -C ${BUILD_DIR}/src -f libtorrent-rasterbar-${VERSION}.tar.gz
+stage ./${PRGNAM} ${BUILD_DIR}
 
-# Build
-cd ${BUILD_DIR}/src/${PRGNAM}-rasterbar-${VERSION}
-chown -Rc root:root .
-# Disable GUI (possible only at compile time: https://github.com/qbittorrent/qBittorrent/wiki/Running-qBittorrent-without-X-server)
-./configure \
-	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX}
-
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
-cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src
-
-# Create package
-/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} ' ' '-p'

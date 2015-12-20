@@ -8,6 +8,7 @@
 */.git
 ffmpeg/ffmpeg/
 qbittorrent/qbittorrent
+libtorrent/libtorrent
 mediatomb/mediatomb
 vlc/vlc/
 x264/x264
