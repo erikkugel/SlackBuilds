@@ -17,7 +17,7 @@ git-pull ${PRGNAM} ${APP_URL} ${GIT_TAG}
 
 stage ${PRGNAM} ${BUILD_DIR}
 
-mkdir ${BUILD_DIR}/etc/rc.d
+mkdir -v -p ${BUILD_DIR}/etc/rc.d
 cp -v -f ./rc.qbittorrent ${BUILD_DIR}/etc/rc.d/rc.qbittorrent
 
 build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} '--disable-gui' ' '
