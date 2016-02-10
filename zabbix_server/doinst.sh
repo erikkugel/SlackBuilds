@@ -8,7 +8,7 @@ if [ ! -d /var/www/htdocs/zabbix ]; then
 	chown -c -R apache:apache /var/www/htdocs/zabbix
 fi
 
-if [ -f /etc/httpd/httpd.conf ] && [ -z "$(grep '^Include /etc/httpd/mod_php.conf' /etc/httpd/httpd.conf)" ] && [ -z "$(apachectl -M | grep php5_module)" ]; then
-	echo "Include /etc/httpd/mod_php.conf" >> /etc/httpd/httpd.conf
+if [ -f /etc/httpd/httpd.conf ] && [ -z "$(grep 'Include /etc/httpd/extra/httpd-zabbix.conf' /etc/httpd/httpd.conf)" ]; then
+	echo "Include /etc/httpd/extra/httpd-zabbix.conf" >> /etc/httpd/httpd.conf
 	/etc/rc.d/rc.httpd graceful
 fi
