@@ -25,6 +25,20 @@ function git-pull {
 	cd ..
 }
 
+function source-from-archive {
+	build_dir=$1
+	file=$2
+	url=$3
+
+	# Download
+	mkdir -v -p ${build_dir}/install ${build_dir} ${build_dir}/src
+	if ! [ -f ${file} ]; then
+	        wget -q ${url}
+	fi
+	# Extract
+	tar -v -x -z -C ${build_dir}/src -f ./${file}
+}
+
 function stage {
 	source_dir=$1
         build_dir=$2
