@@ -61,9 +61,11 @@ function build {
 	build_opts=$6
 
 	# Compile
-	cd ${build_dir}/src/${name}
+	cd ${build_dir}/src/*
 	chown -Rc root:root .
-	./bootstrap.sh
+	if [ -x ./bootstrap.sh ]; then
+		./bootstrap.sh
+	fi
 
 	if [ "$(getconf LONG_BIT)" == "64" ]; then
 	        lib_dir_suffix="64"
