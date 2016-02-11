@@ -7,15 +7,14 @@ VERSION="3.0.0rc1"
 APP_URL="http://downloads.sourceforge.net/project/zabbix/ZABBIX%20Release%20Candidates/${VERSION}/zabbix-${VERSION}.tar.gz"
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
-#DATABASE="mysql"
-DATABASE="sqlite3"
+DATABASE="mysql"
+#DATABASE="sqlite3"
 
 set -e
 
 source ../functions.sh
 
 source-from-archive ${BUILD_DIR} zabbix-${VERSION}.tar.gz ${APP_URL}
-
 
 stage zabbix-${VERSION} ${BUILD_DIR}
 if [ ! -z "${DATABASE}" ]; then
@@ -29,8 +28,7 @@ mkdir -v -p ${BUILD_DIR}/usr/local/share/zabbix/databasescripts \
  ${BUILD_DIR}/etc/httpd/extra \
  ${BUILD_DIR}/etc/php.d
 
-cp -v -R zabbix-${VERSION}/database/mysql ${BUILD_DIR}/usr/local/share/zabbix/databasescripts
-cp -v -R zabbix-${VERSION}/database/sqlite3 ${BUILD_DIR}/usr/local/share/zabbix/databasescripts
+cp -v -R zabbix-${VERSION}/database/${DATABASE} ${BUILD_DIR}/usr/local/share/zabbix/databasescripts
 cp -v -R zabbix-${VERSION}/frontends/php ${BUILD_DIR}/usr/local/share/zabbix/frontends
 cp -v -f ./rc.zabbix_server ${BUILD_DIR}/etc/rc.d
 cp -v -f ./pid.conf ${BUILD_DIR}/usr/local/etc/zabbix_server.conf.d
