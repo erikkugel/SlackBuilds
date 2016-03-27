@@ -3,8 +3,8 @@
 # Ernest Kugel, 2014
 
 PRGNAM="zabbix_server"
-VERSION="3.0.0rc1"
-APP_URL="http://downloads.sourceforge.net/project/zabbix/ZABBIX%20Release%20Candidates/${VERSION}/zabbix-${VERSION}.tar.gz"
+VERSION="3.0.0"
+APP_URL="https://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/${VERSION}/zabbix-${VERSION}.tar.gz"
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1
 DATABASE="mysql"
