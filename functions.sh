@@ -23,6 +23,7 @@ function git-pull {
 		git checkout tags/${tag}
 	fi
 	cd ..
+	cp -aRpf ${source_dir} ${build_dir}/src
 }
 
 function source-from-archive {
@@ -36,7 +37,7 @@ function source-from-archive {
 	        wget -q ${url}
 	fi
 	# Extract
-	tar -x -z -C ${build_dir}/src -f ./${file}
+	tar -x -C $build_dir/src -f ./${file}
 }
 
 function stage {
@@ -48,7 +49,6 @@ function stage {
         if [ -f ./doinst.sh ]; then
 		cp -v -f ./doinst.sh ${build_dir}/install/doinst.sh
 	fi
-	cp -aRpf ${source_dir} ${build_dir}/src
 }
 
 
@@ -59,31 +59,30 @@ function build {
 	build_dir=$4
 	configure_opts=$5
 	build_opts=$6
+	if [ "$(getconf LONG_BIT)" == "64" ]; then
+	        lib_dir_suffix="64"
+	else
+	        lib_dir_suffix=""
+	fi
 
-	# Compile
 	cd ${build_dir}/src/*
 	chown -Rc root:root .
 	if [ -x ./bootstrap ]; then
 		./bootstrap
 	fi
 
-	if [ "$(getconf LONG_BIT)" == "64" ]; then
-	        lib_dir_suffix="64"
-	else
-	        lib_dir_suffix=""
-	fi	
-	./configure \
-		--prefix=/usr/local \
-		--libdir=/usr/local/lib${lib_dir_suffix} ${configure_opts}
-
+	if [ -x ./configure ]; then
+		./configure \
+			--prefix=/usr/local \
+			--libdir=/usr/local/lib${lib_dir_suffix} ${configure_opts}
+	fi
 	make install \
 		-j$(getconf _NPROCESSORS_ONLN) \
 		DESTDIR=${build_dir} \
 		V=99
 	cd ${build_dir} 
 	rm -r -f ${build_dir}/src
-	# Build package
 	/sbin/makepkg -l y ${build_opts} -c n \
-		/tmp/${name}-${version}-$(uname -m)-${tag}.txz
+			/tmp/${name}-${version}-$(uname -m)-${tag}.txz
 	rm -r -f ${build_dir}
 }
