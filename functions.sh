@@ -14,7 +14,7 @@ function git-pull {
 	        git pull
 	        cd ..
 	else
-	        rm -rfv ./${name}
+	        rm -rf ./${name}
 	        git clone $url $name
 	fi
 	# Use a Git tag if specified
@@ -36,7 +36,7 @@ function source-from-archive {
 	        wget -q ${url}
 	fi
 	# Extract
-	tar -v -x -z -C ${build_dir}/src -f ./${file}
+	tar -x -z -C ${build_dir}/src -f ./${file}
 }
 
 function stage {
@@ -48,7 +48,7 @@ function stage {
         if [ -f ./doinst.sh ]; then
 		cp -v -f ./doinst.sh ${build_dir}/install/doinst.sh
 	fi
-	cp -aRpfv ${source_dir} ${build_dir}/src
+	cp -aRpf ${source_dir} ${build_dir}/src
 }
 
 
@@ -63,8 +63,8 @@ function build {
 	# Compile
 	cd ${build_dir}/src/*
 	chown -Rc root:root .
-	if [ -x ./bootstrap.sh ]; then
-		./bootstrap.sh
+	if [ -x ./bootstrap ]; then
+		./bootstrap
 	fi
 
 	if [ "$(getconf LONG_BIT)" == "64" ]; then
@@ -81,9 +81,9 @@ function build {
 		DESTDIR=${build_dir} \
 		V=99
 	cd ${build_dir} 
-	rm -v -r -f ${build_dir}/src
+	rm -r -f ${build_dir}/src
 	# Build package
 	/sbin/makepkg -l y ${build_opts} -c n \
 		/tmp/${name}-${version}-$(uname -m)-${tag}.txz
-	rm -v -r -f ${build_dir}
+	rm -r -f ${build_dir}
 }
