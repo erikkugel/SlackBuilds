@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+readonly PRGNAM="libdvbpsi"
+readonly VERSION="latest"
+#readonly APP_URL=http://download.videolan.org/pub/videolan/${PRGNAM}/${VERSION}/${PRGNAM}-${VERSION}.tar.xz
+readonly APP_URL=git://git.videolan.org/${PRGNAM}.git
+readonly BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+readonly TAG=1_SBx
+
+set -e
+
+source ../functions.sh
+
+log $0
+
+git-pull ${BUILD_DIR} ${PRGNAM} ${APP_URL} ${GIT_TAG}
+
+stage ./${PRGNAM} ${BUILD_DIR}
+
+build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} ' ' '-p'

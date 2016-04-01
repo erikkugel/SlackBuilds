@@ -13,7 +13,7 @@ set -e
 
 source ../functions.sh
 
-git-pull ${PRGNAM} ${APP_URL} ${GIT_TAG}
+git-pull ${BUILD_DIR} ${PRGNAM} ${APP_URL} ${GIT_TAG}
 
 stage ${PRGNAM} ${BUILD_DIR}
 

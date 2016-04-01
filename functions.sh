@@ -2,11 +2,17 @@
 #
 # Functions for SlackBuilds
 
-function git-pull {
-	name=$1
-	url=$2
-	tag=$3
+function log {
+	echo "$(date) : $1 : $2"
+}
 
+function git-pull {
+	build_dir=$1
+	name=$2
+	url=$3
+	tag=$4
+
+	log INFO $FUNCNAME
 	# Clone/Pull latest
 	if [ -d ./${name}/.git ]; then
 	        cd ./${name}
@@ -23,7 +29,8 @@ function git-pull {
 		git checkout tags/${tag}
 	fi
 	cd ..
-	cp -aRpf ${source_dir} ${build_dir}/src
+	mkdir -pv ${build_dir}/src
+	cp -aRpf ./${name} ${build_dir}/src
 }
 
 function source-from-archive {
@@ -31,6 +38,7 @@ function source-from-archive {
 	file=$2
 	url=$3
 
+	log INFO $FUNCNAME
 	# Download
 	mkdir -v -p ${build_dir}/install ${build_dir} ${build_dir}/src
 	if ! [ -f ${file} ]; then
@@ -44,6 +52,7 @@ function stage {
 	source_dir=$1
         build_dir=$2
 
+	log INFO $FUNCNAME
 	mkdir -v -p ${build_dir}/install ${build_dir}/src
 	cp -v -f ./slack-desc ${build_dir}/install/slack-desc
         if [ -f ./doinst.sh ]; then
@@ -59,6 +68,8 @@ function build {
 	build_dir=$4
 	configure_opts=$5
 	build_opts=$6
+	
+	log INFO $FUNCNAME
 	if [ "$(getconf LONG_BIT)" == "64" ]; then
 	        lib_dir_suffix="64"
 	else
