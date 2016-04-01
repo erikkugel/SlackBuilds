@@ -7,7 +7,7 @@ VERSION="latest"
 #APP_URL=http://download.videolan.org/pub/videolan/${PRGNAM}/${VERSION}/${PRGNAM}-${VERSION}.tar.xz
 APP_URL=git://git.videolan.org/${PRGNAM}.git
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=SBx
+TAG=1_SBx
 
 set -e
 
