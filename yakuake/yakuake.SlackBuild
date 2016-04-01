@@ -6,22 +6,20 @@ PRGNAM="yakuake"
 VERSION="2.9.9"
 APP_URL=http://download.kde.org/stable/yakuake/${VERSION}/src/yakuake-${VERSION}.tar.xz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+TAG="SBx"
 
-# Download
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
-wget -q -O - ${APP_URL} | tar -v -x -J -C ${BUILD_DIR}/src -f -
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+set -e
 
-# Build
-mkdir ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/build
-cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/build
+source ../functions.sh
+
+source-from-archive ${BUILD_DIR} yakuake-${VERSION}.tar.xz http://download.kde.org/stable/yakuake/${VERSION}/src/yakuake-${VERSION}.tar.xz
+
+stage ./${PRGNAM}-${VERSION} ${BUILD_DIR}
+
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+mkdir build
+cd build
 cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../
-make
-make install DESTDIR=${BUILD_DIR}
-cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
-
-# Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+make install
+/sbin/makepkg -l y -c n \
+	/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
