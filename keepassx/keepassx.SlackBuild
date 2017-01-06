@@ -2,12 +2,13 @@
 #
 # Ernest Kugel, 2014
 
-PRGNAM="keepassx"
-VERSION="2.0"
-APP_BUILD="alpha6"
-APP_URL="http://www.keepassx.org/dev/attachments/download/69/${PRGNAM}-${VERSION}-${APP_BUILD}.tar.gz"
-BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
-TAG="${APP_BUILD}"
+APP_NAME="keepassx"
+VERSION="2.0.3"
+APP_URL="https://www.keepassx.org/releases/${VERSION}/${APP_NAME}-${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${APP_NAME}-$(date +%s)"
+TAG="SBx"
+
+set -e
 
 # Download
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src
@@ -15,8 +16,8 @@ wget -q -O - ${APP_URL} | tar -v -x -z -C ${BUILD_DIR}/src -f -
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
 # Build
-mkdir ${BUILD_DIR}/src/${PRGNAM}-${VERSION}-${APP_BUILD}/build
-cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}-${APP_BUILD}/build
+mkdir ${BUILD_DIR}/src/${APP_NAME}-${VERSION}/build
+cd ${BUILD_DIR}/src/${APP_NAME}-${VERSION}/build
 cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 make
 make install DESTDIR=${BUILD_DIR}
@@ -25,5 +26,5 @@ cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/build ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+/sbin/makepkg -l y -c n /tmp/${APP_NAME}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}
