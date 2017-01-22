@@ -37,4 +37,4 @@ cp -v -f ./zabbix.ini ${BUILD_DIR}/etc/php.d
 cp -v -f ./pid.conf ${BUILD_DIR}/usr/local/etc/zabbix_server.conf.d
 
 # https://www.zabbix.com/documentation/3.0/manual/installation/install
-build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} "--enable-server --with-${DATABASE} --with-net-snmp" ""
+build ${PRGNAM} ${BUILD_DIR} ${VERSION} ${TAG} --with-net-snmp" ""

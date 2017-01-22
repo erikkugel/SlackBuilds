@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+PRGNAM="libconfuse"
+VERSION="latest"
+#APP_URL=http://download.videolan.org/pub/videolan/${PRGNAM}/${VERSION}/${PRGNAM}-${VERSION}.tar.xz
+APP_URL=https://github.com/martinh/libconfuse.git
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1_SBx
+
+set -e
+
+source ../functions.sh
+
+git-pull ${PRGNAM} ${BUILD_DIR} ${APP_URL} ${GIT_TAG}
+
+stage ${PRGNAM} ${BUILD_DIR}
+
+build ${PRGNAM} ${BUILD_DIR} ${VERSION} ${TAG}  '--enable-shared' '-p'

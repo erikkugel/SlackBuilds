@@ -14,11 +14,11 @@ set -e
 source ../functions.sh
 
 # Clone/Pull latest
-git-pull ${BUILD_DIR} ${PRGNAM} ${APP_URL} ${GIT_TAG}
+git-pull ${PRGNAM} ${BUILD_DIR} ${APP_URL} ${GIT_TAG}
 
 stage ./${PRGNAM} ${BUILD_DIR}
 mkdir -p -v ${BUILD_DIR}/etc/rc.d
 cp -v -f ./rc.vlc ${BUILD_DIR}/etc/rc.d/rc.vlc
 cp -v -f ./rc.vlc.conf ${BUILD_DIR}/etc/rc.d/rc.vlc.conf
 
-build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} '--enable-realrtsp --enable-dvbpsi' '-p'
+build ${PRGNAM} ${BUILD_DIR} ${VERSION} ${TAG} '--enable-realrtsp --enable-dvbpsi' '-p'
