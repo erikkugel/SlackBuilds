@@ -16,7 +16,7 @@ docker_stop() {
   if [ -r ${PID_FILE} ]; then
     kill -TERM $(cat ${PID_FILE})
   else
-    killall -TERM -q docker
+    killall -TERM -q dockerd
     rm -f ${PID_FILE}
   fi
   echo
@@ -32,9 +32,9 @@ docker_restart() {
 # Check if docker is running
 docker_status() {
   if [ -e ${PID_FILE} ]; then
-    echo "docker is running."
+    echo "Docker is running."
   else 
-    echo "docker is stopped."
+    echo "Docker is stopped."
     exit 1
   fi
 }
