@@ -40,7 +40,7 @@ function source-from-archive {
 
 	log INFO $FUNCNAME
 	# Download
-	mkdir -v -p ${build_dir}/install ${build_dir}/src
+	${build_dir}/src
 	if ! [ -f ${file} ]; then
 	        wget -q ${url}
 	fi
@@ -52,7 +52,7 @@ function stage {
         build_dir=$1
 
 	log INFO $FUNCNAME
-	mkdir -v -p ${build_dir}/install ${build_dir}/src
+	mkdir -v -p ${build_dir}/install
 	cp -v ./slack-desc ${build_dir}/install/slack-desc
         if [ -f ./doinst.sh ]; then
 		cp -v ./doinst.sh ${build_dir}/install/doinst.sh
@@ -101,6 +101,7 @@ function package {
 
 	log INFO $FUNCNAME
 	rm -r -f ${build_dir}/src
+	cd ${build_dir}
 	/sbin/makepkg -l y ${build_opts} -c n \
 			/tmp/${name}-${version}-$(uname -m)-${tag}.txz
 	rm -r -f ${build_dir}

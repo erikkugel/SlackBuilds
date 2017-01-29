@@ -25,4 +25,4 @@ find ./src -executable -exec cp {} ./usr/bin \;
 mkdir -v -p usr/share/bash-completion/completions
 cp -v src/${PRGNAM}/completion/bash/docker usr/share/bash-completion/completions
 
-package docker-engine ${BUILD_DIR} ${VERSION} ${TAG} 
+package docker-engine ${BUILD_DIR} ${VERSION} ${TAG}
