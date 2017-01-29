@@ -53,16 +53,12 @@ function stage {
 
 	log INFO $FUNCNAME
 	mkdir -v -p ${build_dir}/install ${build_dir}/src
-	cp -v -f ./slack-desc ${build_dir}/install/slack-desc
+	cp -v ./slack-desc ${build_dir}/install/slack-desc
         if [ -f ./doinst.sh ]; then
 		cp -v ./doinst.sh ${build_dir}/install/doinst.sh
 	fi
-	if [ -x ./rc.* ]; then
-		mkdir -v -p ${build_dir}/etc/rc.d
-		cp -v ./rc.* ${build_dir}/etc/rc.d
-	fi
+	find . -name "rc.*" -type f -executable -exec mkdir -v -p ${build_dir}/etc/rc.d \; -exec cp -v {} ${build_dir}/etc/rc.d \;
 }
-
 
 function build {
 	configure_opts=$1
@@ -103,6 +99,7 @@ function package {
 	version=$3
 	tag=$4
 
+	log INFO $FUNCNAME
 	rm -r -f ${build_dir}/src
 	/sbin/makepkg -l y ${build_opts} -c n \
 			/tmp/${name}-${version}-$(uname -m)-${tag}.txz

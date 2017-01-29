@@ -1,0 +1,11 @@
+docker-engine: Docker Engine
+docker-engine: 
+docker-engine: The Docker Engine is a lightweight container runtime and robust
+docker-engine: tooling that builds and runs your container. Docker allows you to
+docker-engine: package up application code and dependencies together in an isolated
+docker-engine: container that share the OS kernel on the host system. The in-host
+docker-engine: daemon communicates with the Docker Client to execute commands to
+docker-engine: build, ship and run containers.
+docker-engine:
+docker-engine: (https://www.docker.com/products/docker-engine)
+docker-engine:
