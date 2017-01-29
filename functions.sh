@@ -7,8 +7,8 @@ function log {
 }
 
 function git-pull {
-	build_dir=$1
-	name=$2
+	name=$1
+	build_dir=$2
 	url=$3
 	tag=$4
 
@@ -34,18 +34,19 @@ function git-pull {
 }
 
 function source-from-archive {
-	build_dir=$1
-	file=$2
-	url=$3
+	name=$1
+	build_dir=$2
+	file=$3
+	url=$4
 
 	log INFO $FUNCNAME
 	# Download
-	mkdir -v -p ${build_dir}/install ${build_dir} ${build_dir}/src
+	mkdir -v -p ${build_dir}/install ${build_dir}/src
 	if ! [ -f ${file} ]; then
 	        wget -q ${url}
 	fi
 	# Extract
-	tar -x -C $build_dir/src -f ./${file}
+	tar -x -C $build_dir/src/${name} -f ./${file}
 }
 
 function stage {
@@ -63,9 +64,9 @@ function stage {
 
 function build {
 	name=$1
-	version=$2
-	tag=$3
-	build_dir=$4
+	build_dir=$2
+	version=$3
+	tag=$4
 	configure_opts=$5
 	build_opts=$6
 	
@@ -80,6 +81,10 @@ function build {
 	chown -Rc root:root .
 	if [ -x ./bootstrap ]; then
 		./bootstrap
+	elif [ -x ./bootstrap.sh ]; then
+		./bootstrap.sh
+	elif [ -x ./autogen.sh ]; then
+		./autogen.sh
 	fi
 
 	if [ -x ./configure ]; then

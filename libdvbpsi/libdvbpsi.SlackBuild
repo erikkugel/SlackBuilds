@@ -8,6 +8,7 @@ readonly VERSION="latest"
 readonly APP_URL=git://git.videolan.org/${PRGNAM}.git
 readonly BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 readonly TAG=1_SBx
+readonly GIT_TAG="1.3.0"
 
 set -e
 
@@ -15,8 +16,8 @@ source ../functions.sh
 
 log $0
 
-git-pull ${BUILD_DIR} ${PRGNAM} ${APP_URL} ${GIT_TAG}
+git-pull ${PRGNAM} ${BUILD_DIR} ${APP_URL} ${GIT_TAG}
 
 stage ./${PRGNAM} ${BUILD_DIR}
 
-build ${PRGNAM} ${VERSION} ${TAG} ${BUILD_DIR} ' ' '-p'
+build ${PRGNAM} ${BUILD_DIR} ${VERSION} ${TAG} ' ' '-p'
