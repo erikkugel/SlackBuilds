@@ -5,14 +5,15 @@
 PRGNAM=flash_player
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 MOZILLA_PLUGIN_PATH=/usr/lib64/mozilla/plugins
-VERSION=11
-TAG=1
+VERSION=25
+TAG=SBx
 
 mkdir -v -p ${BUILD_DIR}/install
 
-tar -v -x -z -C ${BUILD_DIR} -f ./install_flash_player_${VERSION}_linux.$(uname -m).tar.gz
+tar -v -x -z -C ${BUILD_DIR} -f ./flash_player_npapi_linux.x86_64.tar.gz
 
-mv ${BUILD_DIR}/usr/lib ${BUILD_DIR}/usr/lib64
+#mv ${BUILD_DIR}/usr/lib ${BUILD_DIR}/usr/lib64
+rm -r -f -v ${BUILD_DIR}/license.pdf ${BUILD_DIR}/readme.txt ${BUILD_DIR}/LGPL
 mkdir -p ${BUILD_DIR}/${MOZILLA_PLUGIN_PATH}
 mv -v -f ${BUILD_DIR}/libflashplayer.so ${BUILD_DIR}/${MOZILLA_PLUGIN_PATH}/ 
 
