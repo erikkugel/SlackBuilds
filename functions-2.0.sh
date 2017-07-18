@@ -39,8 +39,9 @@ function source-from-archive {
 	url=$3
 
 	log INFO $FUNCNAME
+
+	mkdir -pv ${build_dir}/src
 	# Download
-	${build_dir}/src
 	if ! [ -f ${file} ]; then
 	        wget -q ${url}
 	fi
