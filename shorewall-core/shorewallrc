@@ -2,7 +2,7 @@
 # Created by Shorewall Core version 4.6.11 configure -  Tue Aug 11 20:03:43 EDT 2015
 #
 HOST=slackware
-PREFIX=/usr/local                    
+PREFIX=/usr                    
 SHAREDIR=${PREFIX}/share                   
 LIBEXECDIR=${PREFIX}/share                 
 PERLLIBDIR=${PREFIX}/share/shorewall       

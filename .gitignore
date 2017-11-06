@@ -1,3 +1,4 @@
+.*
 *~
 *.tar.gz
 *.tar.bz2
@@ -6,13 +7,3 @@
 *.txz
 */.svn
 */.git
-ffmpeg/ffmpeg/
-qbittorrent/qbittorrent
-libtorrent/libtorrent
-mediatomb/mediatomb
-vlc/vlc/
-x264/x264
-xvidcore/xvidcore
-xvidcore/xvidextra
-hostapd/hostapd-*
-zabbix_server/zabbix-*

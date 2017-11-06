@@ -1,5 +1,3 @@
-ln -v -f -s /usr/local/sbin/shorewall /sbin/shorewall
-
 for NEW_CONFIG_FILE in $(find /etc/shorewall/*.new /etc/logrotate.d/shorewall.new -type f -print); do
   CONFIG_FILE=$(dirname ${NEW_CONFIG_FILE})/$(basename ${NEW_CONFIG_FILE} .new)
   if ! [ -f ${CONFIG_FILE} ]; then
