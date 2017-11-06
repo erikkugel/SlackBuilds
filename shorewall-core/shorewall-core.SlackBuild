@@ -17,7 +17,7 @@ cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 DESTDIR=${BUILD_DIR} ./install.sh ./shorewallrc.slackware
-cd ${BUILD_DIR} 
+cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package

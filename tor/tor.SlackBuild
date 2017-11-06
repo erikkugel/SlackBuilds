@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2015
+
+PRGNAM="tor"
+VERSION="0.3.1.8"
+APP_URL=https://www.torproject.org/dist/tor-${VERSION}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1
+
+set -e
+
+if [ "$(getconf LONG_BIT)" == "64" ]; then
+	LIBDIRSUFFIX="64"
+	export CFLAGS="-fPIC"
+	export CPPFLAGS="-fPIC"
+else
+	LIBDIRSUFFIX=""
+fi  
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
+if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
+        wget ${APP_URL}
+fi
+tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tar.gz
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v -f ./rc.tor ${BUILD_DIR}/etc/rc.d/rc.tor
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+./configure --prefix=/usr \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --libdir=/usr/lib${LIBDIRSUFFIX}
+make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
+cd ${BUILD_DIR}
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
