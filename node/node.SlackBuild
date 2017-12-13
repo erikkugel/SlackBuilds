@@ -1,0 +1,30 @@
+#!/bin/sh -e
+
+PRGNAM='node'
+VERSION='8.9.3'
+TAG=1_x
+APP_URL=https://nodejs.org/dist/v${VERSION}/${PRGNAM}-v${VERSION}-linux-x64.tar.xz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+
+set -e
+
+# Download
+if ! [ -f "${PRGNAM}-v${VERSION}-linux-x64.tar.xz" ]; then
+	wget ${APP_URL}
+fi
+
+
+mkdir -v -p ${BUILD_DIR}/install && cp -v ./slack-desc ${BUILD_DIR}/install
+
+mkdir ${BUILD_DIR}/usr && tar \
+	--exclude=*.md \
+	--exclude=LICENSE \
+	--strip-components=1 \
+	-xJf ${PRGNAM}-v${VERSION}-linux-x64.tar.xz \
+	-C ${BUILD_DIR}/usr
+
+# Create package
+cd ${BUILD_DIR}
+
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
