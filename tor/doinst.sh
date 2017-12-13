@@ -8,6 +8,6 @@ fi )
 fi
 chown -c tor:tor /var/log/tor )
 ( if [ ! -d /var/lib/tor/keys ]; then
-	mkdir -v /var/lib/tor/keys
+	mkdir -v -p /var/lib/tor/keys
 fi
 chown -c tor:tor /var/lib/tor/keys )
