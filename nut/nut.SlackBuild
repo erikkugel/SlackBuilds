@@ -2,11 +2,11 @@
 #
 # Ernest Kugel, 2017
 
-PRGNAM="nut"
-VERSION="2.7.4"
+PRGNAM='nut'
+VERSION='2.7.4'
 APP_URL=http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+TAG='1_x'
 
 set -e
 
