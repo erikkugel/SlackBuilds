@@ -4,21 +4,21 @@
 # Start ups:
 ups_start() {
   echo "Starting UPS driver"
-  /usr/local/sbin/upsdrvctl start
+  /usr/sbin/upsdrvctl start
   echo "Starting UPS daemon"
-  /usr/local/sbin/upsd
+  /usr/sbin/upsd
   echo "Starting UPS monitor"
-  /usr/local/sbin/upsmon
+  /usr/sbin/upsmon
 }
 
 # Stop ups:
 ups_stop() {
   echo "Stopping UPS monitor"
-  /usr/local/sbin/upsmon -c stop
+  /usr/sbin/upsmon -c stop
   echo "Stopping UPS daemon"
-  /usr/local/sbin/upsd -c stop
+  /usr/sbin/upsd -c stop
   echo "Stopping UPS driver"
-  /usr/local/sbin/upsdrvctl stop
+  /usr/sbin/upsdrvctl stop
 }
 
 # Restart ups:
@@ -30,9 +30,9 @@ ups_restart() {
 
 ups_reload() {
   echo "Reloading UPS daemon"
-  /usr/local/sbin/upsd -c reload
+  /usr/sbin/upsd -c reload
   echo "Reloading UPS monitor"
-  /usr/local/sbin/upsmon -c reload
+  /usr/sbin/upsmon -c reload
 }
 
 # Check if ups is running
@@ -43,8 +43,8 @@ ups_status() {
     echo "ups is stopped."
   fi
   echo -n "UPS status: "
-  for UPS in $(/usr/local/bin/upsc -l); do
-  	/usr/local/bin/upsc ${UPS}@localhost ups.status
+  for UPS in $(/usr/bin/upsc -l); do
+  	/usr/bin/upsc ${UPS}@localhost ups.status
   done
   if [ -e /var/run/upsmon.pid ]; then
     echo "UPS monitor is running."
