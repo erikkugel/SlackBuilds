@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-PRGNAM='Signal_Desktop'
-VERSION='1.0.41'
+PRGNAM='signal-desktop'
+VERSION='1.3.0'
 TAG=1_x
 APP_URL=https://github.com/WhisperSystems/Signal-Desktop/archive/v${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
@@ -13,15 +13,22 @@ if ! [ -f "Signal-Desktop-${VERSION}.tar.gz" ]; then
         wget ${APP_URL} -O Signal-Desktop-${VERSION}.tar.gz
 fi
 
-mkdir -p ${BUILD_DIR}/opt && tar -vxzf ./Signal-Desktop-${VERSION}.tar.gz -C ${BUILD_DIR}/opt
-mv -v ${BUILD_DIR}/opt/Signal-Desktop-${VERSION} ${BUILD_DIR}/opt/Signal-Desktop
+mkdir -p ${BUILD_DIR}/src && tar -vxzf ./Signal-Desktop-${VERSION}.tar.gz -C ${BUILD_DIR}/src
+cd ${BUILD_DIR}/src/Signal-Desktop-${VERSION}
+npm install -g yarn
+yarn install
+yarn generate
+yarn build-release
+mkdir ${BUILD_DIR}/opt
+mv -v ${BUILD_DIR}/src/Signal-Desktop-${VERSION}/release/linux-unpacked ${BUILD_DIR}/opt/signal-desktop
+rm -rf ${BUILD_DIR}/src
 
-mkdir -v -p ${BUILD_DIR}/install
-cp -v ./slack-desc ${BUILD_DIR}/install
-cp -v ./doinst.sh ${BUILD_DIR}/install
+#mkdir -v -p ${BUILD_DIR}/install
+#cp -v ./slack-desc ${BUILD_DIR}/install
+#cp -v ./doinst.sh ${BUILD_DIR}/install
 
-mkdir -v -p ${BUILD_DIR}/usr/bin
-cp -v Signal-Desktop.sh ${BUILD_DIR}/usr/bin
+#mkdir -v -p ${BUILD_DIR}/usr/bin
+#cp -v Signal-Desktop.sh ${BUILD_DIR}/usr/bin
 
 # Create package
 cd ${BUILD_DIR}

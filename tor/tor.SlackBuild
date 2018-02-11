@@ -6,7 +6,7 @@ PRGNAM="tor"
 VERSION="0.3.1.9"
 APP_URL=https://www.torproject.org/dist/tor-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+TAG=1_x
 
 set -e
 
