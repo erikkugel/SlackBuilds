@@ -13,7 +13,14 @@ if ! [ -f "Signal-Desktop-${VERSION}.tar.gz" ]; then
         wget ${APP_URL} -O Signal-Desktop-${VERSION}.tar.gz
 fi
 
-mkdir -p ${BUILD_DIR}/src && tar -vxzf ./Signal-Desktop-${VERSION}.tar.gz -C ${BUILD_DIR}/src
+mkdir -v -p ${BUILD_DIR}/install
+cp -v ./slack-desc ${BUILD_DIR}/install
+
+mkdir -v -p ${BUILD_DIR}/usr/bin
+cp -v signal-desktop.sh ${BUILD_DIR}/usr/bin
+chmod +x ${BUILD_DIR}/usr/bin/signal-desktop.sh
+
+mkdir -v ${BUILD_DIR}/src && tar -vxzf ./Signal-Desktop-${VERSION}.tar.gz -C ${BUILD_DIR}/src
 cd ${BUILD_DIR}/src/Signal-Desktop-${VERSION}
 npm install -g yarn
 yarn install
@@ -23,15 +30,7 @@ mkdir ${BUILD_DIR}/opt
 mv -v ${BUILD_DIR}/src/Signal-Desktop-${VERSION}/release/linux-unpacked ${BUILD_DIR}/opt/signal-desktop
 rm -rf ${BUILD_DIR}/src
 
-#mkdir -v -p ${BUILD_DIR}/install
-#cp -v ./slack-desc ${BUILD_DIR}/install
-#cp -v ./doinst.sh ${BUILD_DIR}/install
-
-#mkdir -v -p ${BUILD_DIR}/usr/bin
-#cp -v Signal-Desktop.sh ${BUILD_DIR}/usr/bin
-
 # Create package
 cd ${BUILD_DIR}
-
 /sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}
