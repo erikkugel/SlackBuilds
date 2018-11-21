@@ -7,3 +7,4 @@
 *.txz
 */.svn
 */.git
+package-lock.json

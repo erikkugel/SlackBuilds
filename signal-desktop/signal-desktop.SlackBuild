@@ -1,10 +1,10 @@
 #!/bin/sh -e
 
 PRGNAM='signal-desktop'
-VERSION='1.3.0'
-TAG=1_x
-APP_URL=https://github.com/WhisperSystems/Signal-Desktop/archive/v${VERSION}.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+VERSION='1.18.0'
+TAG='1_x'
+APP_URL="https://github.com/signalapp/Signal-Desktop/archive/v${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 
 set -e
 
@@ -22,13 +22,13 @@ chmod +x ${BUILD_DIR}/usr/bin/signal-desktop.sh
 
 mkdir -v ${BUILD_DIR}/src && tar -vxzf ./Signal-Desktop-${VERSION}.tar.gz -C ${BUILD_DIR}/src
 cd ${BUILD_DIR}/src/Signal-Desktop-${VERSION}
-npm install -g yarn
-yarn install
-yarn generate
-yarn build-release
+npm install -g yarn --prefix ${BUILD_DIR}/tmp/yarn
+${BUILD_DIR}/tmp/yarn/bin/yarn install
+${BUILD_DIR}/tmp/yarn/bin/yarn generate
+${BUILD_DIR}/tmp/yarn/bin/yarn build-release
 mkdir ${BUILD_DIR}/opt
 mv -v ${BUILD_DIR}/src/Signal-Desktop-${VERSION}/release/linux-unpacked ${BUILD_DIR}/opt/signal-desktop
-rm -rf ${BUILD_DIR}/src
+rm -rf ${BUILD_DIR}/src ${BUILD_DIR}/tmp
 
 # Create package
 cd ${BUILD_DIR}
