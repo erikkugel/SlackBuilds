@@ -1,0 +1,49 @@
+#!/bin/sh
+# Start/stop/restart transmission.
+TRANSMISSION_USER="transmission"
+CMDLINE="transmission-daemon"
+
+# Start transmission:
+transmission_start() {
+  echo "Starting TRANSMISSION daemon..."
+  sudo -s -u ${TRANSMISSION_USER} ${CMDLINE}
+  echo
+}
+
+# Stop transmission:
+transmission_stop() {
+  echo -n "Stopping TRANSMISSION daemon..."
+  killall -SIGINT -q ${CMDLINE}
+  echo
+}
+
+# Reload transmission:
+transmission_reload() {
+  echo -n "Reloading TRANSMISSION daemon..."
+  killall -SIGHUP -q ${CMDLINE}
+  echo
+}
+
+# Restart transmission:
+transmission_restart() {
+  transmission_stop
+  sleep 1
+  transmission_start
+}
+
+case "$1" in
+'start')
+  transmission_start
+  ;;
+'stop')
+  transmission_stop
+  ;;
+'restart')
+  transmission_restart
+  ;;
+'reload')
+  transmission_reload
+  ;;
+*)
+  echo "usage $0 start|stop|restart|reload"
+esac
