@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2018
+
+PRGNAM='suricata-rules'
+VERSION='latest'
+APP_URL='http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+set -e
+
+# Download
+if ! [ -f emerging.rules.tar.gz ]; then
+        wget ${APP_URL}
+fi
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/var/lib/suricata
+tar -v -x -z -C ${BUILD_DIR}/var/lib/suricata -f ./emerging.rules.tar.gz
+
+# Create package
+cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
+cd ${BUILD_DIR}
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
