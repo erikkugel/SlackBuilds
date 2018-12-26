@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+PRGNAM="qbittorrent"
+VERSION="latest"
+APP_URL="https://github.com/qbittorrent/qBittorrent.git"
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1
+
+set -e
+
+if [ "$(getconf LONG_BIT)" == "64" ]; then
+        LIBDIRSUFFIX="64"
+else
+        LIBDIRSUFFIX=""
+fi
+
+# Clone/Pull latest
+if [ -d ./${PRGNAM}/.git ]; then
+        cd ./${PRGNAM}
+        git pull
+        cd ..
+else
+        rm -rfv ./${PRGNAM}
+        git clone ${APP_URL} ${PRGNAM}
+fi
+
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v -f ./rc.qbittorrent ${BUILD_DIR}/etc/rc.d/rc.qbittorrent
+cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}
+chown -Rc root:root .
+# Skip GUI: https://github.com/qbittorrent/qBittorrent/wiki/Running-qBittorrent-without-X-server
+./configure \
+	--prefix=/usr/local \
+	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
+        --disable-gui
+
+make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}

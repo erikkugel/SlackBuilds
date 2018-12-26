@@ -1,0 +1,56 @@
+#!/bin/bash
+# Start/stop/restart qbittorrent.
+
+# Start qbittorrent:
+qbittorrent_start() {
+  echo "y" | sudo -u qbittorrent /usr/local/bin/qbittorrent-nox -d -webui-port=8080
+  pgrep qbittorrent-nox > /var/run/qbittorrent/qbittorrent.pid
+  echo "Starting qBitTorrent daemon..."
+  echo
+}
+
+# Stop qbittorrent:
+qbittorrent_stop() {
+  echo -n "Stopping qBitTorrent daemon..."
+  if [ -r /var/run/qbittorrent/qbittorrent.pid ]; then
+    kill -HUP $(cat /var/run/qbittorrent/qbittorrent.pid)
+    rm -f /var/run/qbittorrent/qbittorrent.pid
+  else
+    killall -HUP -q qbittorrent-nox
+  fi
+  echo
+}
+
+# Restart qbittorrent:
+qbittorrent_restart() {
+  qbittorrent_stop
+  sleep 1
+  qbittorrent_start
+}
+
+# Check if qbittorrent is running
+qbittorrent_status() {
+  if [ -e /var/run/qbittorrent/qbittorrent.pid ]; then
+    echo "qbittorrent is running."
+  else 
+    echo "qbittorrent is stopped."
+    exit 1
+  fi
+}
+
+case "$1" in
+'start')
+  qbittorrent_start
+  ;;
+'stop')
+  qbittorrent_stop
+  ;;
+'restart')
+  qbittorrent_restart
+  ;;
+'status')
+  qbittorrent_status
+  ;;
+*)
+  echo "usage $0 start|stop|restart|status"
+esac

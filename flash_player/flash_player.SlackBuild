@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+PRGNAM=flash_player
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+MOZILLA_PLUGIN_PATH=/usr/lib64/mozilla/plugins
+VERSION=11
+TAG=1
+
+mkdir -v -p ${BUILD_DIR}/install
+
+tar -v -x -z -C ${BUILD_DIR} -f ./install_flash_player_${VERSION}_linux.$(uname -m).tar.gz
+
+mv ${BUILD_DIR}/usr/lib ${BUILD_DIR}/usr/lib64
+mkdir -p ${BUILD_DIR}/${MOZILLA_PLUGIN_PATH}
+mv -v -f ${BUILD_DIR}/libflashplayer.so ${BUILD_DIR}/${MOZILLA_PLUGIN_PATH}/ 
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+
+cd ${BUILD_DIR}
+chown -R root:root .
+makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -r -f ${BUILD_DIR}

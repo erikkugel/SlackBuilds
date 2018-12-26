@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2014
+
+PRGNAM="a52dec"
+VERSION="0.7.4"
+APP_URL=http://liba52.sourceforge.net/files/${PRGNAM}-${VERSION}.tar.gz
+BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+TAG=1
+
+set -e
+
+if [ "$(uname -m)" == "x86_64" ]; then
+	LIBDIRSUFFIX="64"
+	export CFLAGS="-fPIC"
+else
+	LIBDIRSUFFIX=""
+fi  
+
+# Download
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR} ${BUILD_DIR}/src
+if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
+	wget -q ${APP_URL}
+fi
+tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tar.gz
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+./configure \
+	--prefix=/usr/local \
+	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
+	--enable-shared \
+	--with-pic
+
+make install DESTDIR=${BUILD_DIR}
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
