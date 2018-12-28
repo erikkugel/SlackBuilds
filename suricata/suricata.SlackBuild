@@ -22,12 +22,13 @@ fi
 if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
         wget ${APP_URL}
 fi
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
 tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tar.gz
 cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v ./rc.suricata ${BUILD_DIR}/etc/rc.d
 
-# Build
+# Builds
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 export DESTDIR=${BUILD_DIR}
 ./configure \
@@ -43,7 +44,7 @@ cp -v src/${PRGNAM}-${VERSION}/reference.config etc/suricata/reference.config.ne
 cp -v src/${PRGNAM}-${VERSION}/suricata.yaml etc/suricata/suricata.yaml.new
 mkdir -v -p var/lib/suricata/rules
 cp -v src/${PRGNAM}-${VERSION}/rules/*.rules var/lib/suricata/rules
-mkdir -v -p var/log/suricata var/run/suricata
+mkdir -v -p var/log/suricata
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
