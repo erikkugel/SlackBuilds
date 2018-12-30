@@ -2,18 +2,17 @@
 #
 # Ernest Kugel, 2018
 
-PRGNAM='suricata-rules'
-VERSION='latest'
-APP_URL='http://rules.emergingthreats.net/open/suricata/emerging.rules.tar.gz'
+PRGNAM='suricata-emerging-threats'
+SURICATA_VERSION='4.1.0'
+APP_URL="https://rules.emergingthreats.net/open/suricata-${SURICATA_VERSION}/emerging.rules.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
 
 set -e
 
 # Download
-if ! [ -f emerging.rules.tar.gz ]; then
-        wget ${APP_URL}
-fi
+VERSION=$(wget -qO- https://rules.emergingthreats.net/open/suricata-${SURICATA_VERSION}/version.txt)
+wget -nc https://rules.emergingthreats.net/open/suricata-${SURICATA_VERSION}/emerging.rules.tar.gz       
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/var/lib/suricata
 tar -v -x -z -C ${BUILD_DIR}/var/lib/suricata -f ./emerging.rules.tar.gz
 
