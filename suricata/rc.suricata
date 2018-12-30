@@ -1,13 +1,12 @@
 #!/bin/bash
 # Start/stop/restart Suricata.
-USER='suri'
-GROUP=${USER}
-CMDLINE="/usr/bin/suricata -c /etc/suricata/suricata.yaml -D -i eth0 --user=${USER} --group=${GROUP} --init-errors-fatal"
+
+INTERFACE='eth0'
 
 # Start:
 start() {
         echo "Starting Suricata daemon..."
-        ${CMDLINE}
+        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D eth0 --user=suri --group=suri --init-errors-fatal
         echo
 }
 

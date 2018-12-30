@@ -36,7 +36,7 @@ export DESTDIR=${BUILD_DIR}
 	--libdir=/usr/lib64 \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
-&& make install
+&& make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
 cd ${BUILD_DIR}
 mkdir -v -p etc/suricata
 cp -v src/${PRGNAM}-${VERSION}/classification.config etc/suricata/classification.config.new

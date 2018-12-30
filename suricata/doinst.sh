@@ -23,9 +23,6 @@ fi
 chown suri:suri /var/log/suricata
 
 # Install new config files
-for NEW_CONFIG_FILE in $(ls -1 /etc/suricata/*.new); do
-        CONFIG_FILE=$(dirname ${NEW_CONFIG_FILE})/$(basename ${NEW_CONFIG_FILE} .new)
-        if ! [ -f ${CONFIG_FILE} ]; then
-                mv -v ${NEW_CONFIG_FILE} ${CONFIG_FILE}
-        fi
-done
+config /etc/suricata/classification.config.new
+config /etc/suricata/reference.config.new
+config /etc/suricata/suricata.yaml.new
