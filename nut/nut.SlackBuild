@@ -34,7 +34,7 @@ cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 	--sysconfdir=/etc \
 	--with-user=ups \
 	--with-group=nut
-make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
+make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
 make check
 make install DESTDIR=${BUILD_DIR}
 make installcheck

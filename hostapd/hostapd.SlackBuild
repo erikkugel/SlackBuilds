@@ -35,7 +35,7 @@ cat defconfig > .config
 sed -i 's/^#CONFIG_IEEE80211N=[ny]/CONFIG_IEEE80211N=y/' .config
 sed -i 's/^#CONFIG_ACS=[ny]/CONFIG_ACS=y/' .config
 
-make install DESTDIR=${BUILD_DIR} -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
+make install DESTDIR=${BUILD_DIR} -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
 mkdir -v -p ${BUIDL_DIR}/usr/local/bin ${BUILD_DIR}/etc/hostapd ${BUILD_DIR}/usr/local/man/man1 ${BUILD_DIR}/usr/local/man/man8 
 
 # Stage binaries that are not installed by default

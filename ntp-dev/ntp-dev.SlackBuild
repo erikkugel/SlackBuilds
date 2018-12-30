@@ -18,7 +18,7 @@ fi
 tar vxzf ntp-dev-${NTP_DEV_VER}.tar.gz
 cd ntp-dev-${NTP_DEV_VER}
 ./configure --prefix=/opt/ntp-dev-${NTP_DEV_VER} --with-memlock
-make V=99 || exit 1
+make || exit 1
 make check || exit 1
 make install DESTDIR=${BUILD_DIR} || exit 1
 rm -rf ../ntp-dev-${NTP_DEV_VER}

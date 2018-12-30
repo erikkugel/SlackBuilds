@@ -41,7 +41,7 @@ chown -Rc root:root .
 	--shlibdir=/usr/local/lib${LIBDIRSUFFIX} \
 	--enable-shared
 
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR} V=99
+make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
 

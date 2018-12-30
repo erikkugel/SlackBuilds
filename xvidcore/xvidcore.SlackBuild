@@ -33,7 +33,7 @@ cd ${BUILD_DIR}/src/${PRGNAM}/build/generic
 	--prefix=/usr/local \
 	--libdir=/usr/local/lib${LIBDIRSUFFIX}
 
-make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) V=99
+make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
 make install DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
