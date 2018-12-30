@@ -1,12 +1,18 @@
 #!/bin/bash
 # Start/stop/restart Suricata.
 
-INTERFACE='eth0'
+# Space separated list of interfaces
+INTERFACES='eth0 wlan0'
+
+unset INTERFACE_OPTIONS
+for INTERFACE in ${INTERFACES}; do
+        INTERFACE_OPTIONS="${INTERFACE_OPTIONS} -i ${INTERFACE}"
+done
 
 # Start:
 start() {
         echo "Starting Suricata daemon..."
-        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D -i ${INTERFACE} --user=suri --group=suri --init-errors-fatal
+        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D --user=suri --group=suri --init-errors-fatal ${INTERFACE_OPTIONS}
         echo
 }
 
