@@ -6,7 +6,7 @@ INTERFACE='eth0'
 # Start:
 start() {
         echo "Starting Suricata daemon..."
-        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D eth0 --user=suri --group=suri --init-errors-fatal
+        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D -i ${INTERFACE} --user=suri --group=suri --init-errors-fatal
         echo
 }
 
