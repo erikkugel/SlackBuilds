@@ -20,21 +20,6 @@ if [ -z "$(getent passwd elasticsearch)" ]; then
 fi
 
 # Set log folder permissions
-chown elasticsearch:elasticsearch /etc/elasticsearch\
- /var/lib/elasticsearch\
- /usr/share/elasticsearch/plugins\
- /var/log/elasticsearch\
- /var/run/elasticsearch\
- /usr/share/elasticsearch/bin\
- /usr/share/elasticsearch/lib\
- /usr/share/elasticsearch/modules
+chown elasticsearch:elasticsearch /opt/elasticsearch
 
-# Install new config files
-for config in /etc/elasticsearch/*.new; do
-        config $config
-done
-
-# Symlink binaries
-for binary in /usr/share/elasticsearch/bin; do
-        ln -v -s $binary /usr/bin/
-done
+### TO DO: Config .new files and binary symlinking
