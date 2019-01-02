@@ -15,7 +15,9 @@ set -x
 if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
         wget ${APP_URL}
 fi
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/tmp
+mkdir -v -p ${BUILD_DIR}/install\
+ ${BUILD_DIR}/etc/rc.d\
+ ${BUILD_DIR}/tmp
 tar -v -x -z -C ${BUILD_DIR}/tmp -f ./${PRGNAM}-${VERSION}.tar.gz
 cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v ./doinst.sh ${BUILD_DIR}/install/doinst.sh
@@ -23,11 +25,25 @@ cp -v ./rc.elasticsearch ${BUILD_DIR}/etc/rc.d
 
 # Stage
 cd ${BUILD_DIR}/tmp/${PRGNAM}-${VERSION}/config
-find . -type f -exec mv {} {}.new \;
+mkdir -v -p ${BUILD_DIR}/etc/elasticsearch
+for CONFIG in *; do
+        cp -v -a ${CONFIG} ${BUILD_DIR}/etc/elasticsearch/${CONFIG}.new
+done
+
 cd ${BUILD_DIR}
-mkdir -v opt
-cp -a -R -p -v tmp/${PRGNAM}-${VERSION} opt/${PRGNAM}
+mkdir -v -p usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/LICENSE.txt usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/NOTICE.txt usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/README.textile usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/bin usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/lib usr/share/elasticsearch
+cp -v -a tmp/${PRGNAM}-${VERSION}/modules usr/share/elasticsearch
 rm -r -f tmp
+mkdir -v -p usr/share/elasticsearch/plugins\
+ var/lib/elasticsearch\
+ var/log/elasticsearch\
+ var/run/elasticsearch\
+ tmp/elasticsearch
 
 # Create package
 /sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz

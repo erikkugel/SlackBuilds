@@ -1,6 +1,10 @@
 #!/bin/bash
 #
+# SlackBuild for Elasticsearch
+#
+# https://docs.slackware.com/slackware:slackbuild_scripts
 # https://www.slackwiki.com/Doinst.sh
+# https://google.github.io/styleguide/shell.xml
 
 config() {
         NEW="$1"
@@ -16,10 +20,17 @@ config() {
 
 # Create a user
 if [ -z "$(getent passwd elasticsearch)" ]; then
-	/usr/sbin/useradd -r -m -U -c Elasticsearch elasticsearch
+	/usr/sbin/useradd -r -U -c Elasticsearch elasticsearch
 fi
 
 # Set log folder permissions
-chown elasticsearch:elasticsearch /opt/elasticsearch
+chown elasticsearch:elasticsearch /usr/share/elasticsearch/plugins\
+ /var/lib/elasticsearch\
+ /var/log/elasticsearch\
+ /var/run/elasticsearch\
+ /tmp/elasticsearch
 
-### TO DO: Config .new files and binary symlinking
+# Install configs and symlinks
+for CONFIG in /etc/elasticsearch/*; do
+        config ${CONFIG}
+done

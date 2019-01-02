@@ -3,26 +3,25 @@
 
 # Start:
 start() {
-        echo "Starting Suricata daemon..."
-        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D --user=suri --group=suri --init-errors-fatal ${INTERFACE_OPTIONS}
-        echo
+        echo "Starting Elasticsearch..."
+        
 }
 
 # Stop:
 stop() {
-        if [ -f /var/run/suricata.pid ]; then
-                echo -n "Stopping Suricata daemon..."
-                kill $(cat /var/run/suricata.pid)
-                rm -f /var/run/suricata.pid
+        if [ -f /var/run/elasticsearch.pid ]; then
+                echo -n "Stopping Elasticsearch daemon..."
+                kill $(cat /var/run/elasticsearch.pid)
+                rm -f /var/run/elasticsearch.pid
                 echo
         fi
 }
 
 # Reload:
 reload() {
-        if [ -f /var/run/suricata.pid ]; then
+        if [ -f /var/run/elasticsearch.pid ]; then
                 echo -n "Reloading rules..."
-                kill -USR2 $(cat /var/run/suricata.pid)
+                kill -USR2 $(cat /var/run/elasticsearch.pid)
                 echo
         fi
 }
@@ -32,13 +31,13 @@ restart() {
         stop && start
 }
 
-# Check if suricata is running
+# Check if elasticsearch is running
 status() {
-        if [ -f /var/run/suricata.pid ]; then
-                echo "suricata is running."
+        if [ -f /var/run/elasticsearch.pid ]; then
+                echo "elasticsearch is running."
                 exit 0
         else 
-                echo "suricata is stopped."
+                echo "elasticsearch is stopped."
                 exit 1
         fi
 }
