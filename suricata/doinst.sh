@@ -20,7 +20,7 @@ if [ -z "$(getent passwd suri)" ]; then
 fi
 
 # Set log folder permissions
-chown suri:suri /var/log/suricata
+chown suri:suri /var/log/suricata /var/run/suricata
 
 # Install new config files
 config /etc/suricata/classification.config.new

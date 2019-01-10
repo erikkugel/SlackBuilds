@@ -12,15 +12,17 @@ TAG='1_x'
 CORES="$(nproc --all)"
 if [ "$(getconf LONG_BIT)" == '64' ]; then
         LIBDIRSUFFIX='64'
-        export CFLAGS="${CFLAGS} -fPIC"
-        export CPPFLAGS="${CPPFLAGS} -fPIC"
+        export CFLAGS="${CFLAGS} -O2 -fPIC"
+        export CPPFLAGS="${CPPFLAGS} -O2 -fPIC"
 else
         LIBDIRSUFFIX=''
+        export CFLAGS="${CFLAGS} -O2 -mtune=native"
+        export CPPFLAGS="${CPPFLAGS} -O2 -mtune=native"
 fi
 
 # Download latest
 if ! [ -f jansson-${VERSION}.tar.bz2 ]; then
-  wget -nc ${APP_URL}
+  wget ${APP_URL}
 fi
 
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src

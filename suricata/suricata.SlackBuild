@@ -12,10 +12,12 @@ TAG='1_x'
 CORES="$(nproc --all)"
 if [ "$(getconf LONG_BIT)" == '64' ]; then
         LIBDIRSUFFIX='64'
-        export CFLAGS="${CFLAGS} -fPIC"
-        export CPPFLAGS="${CPPFLAGS} -fPIC"
+        export CFLAGS="${CFLAGS} -O2 -fPIC"
+        export CPPFLAGS="${CPPFLAGS} -O2 -fPIC"
 else
         LIBDIRSUFFIX=''
+        export CFLAGS="${CFLAGS} -O2 -mtune=native"
+        export CPPFLAGS="${CPPFLAGS} -O2 -mtune=native"
 fi
 
 # Download
@@ -45,7 +47,7 @@ mkdir -v -p etc/suricata
 cp -v src/${PRGNAM}-${VERSION}/classification.config etc/suricata/classification.config.new
 cp -v src/${PRGNAM}-${VERSION}/reference.config etc/suricata/reference.config.new
 cp -v src/${PRGNAM}-${VERSION}/suricata.yaml etc/suricata/suricata.yaml.new
-mkdir -v -p var/log/suricata
+mkdir -v -p var/log/suricata var/run/suricata
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package

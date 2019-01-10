@@ -4,25 +4,31 @@
 # Start:
 start() {
         echo "Starting Suricata daemon..."
-        /usr/bin/suricata -c /etc/suricata/suricata.yaml -D --user=suri --group=suri --init-errors-fatal --af-packet
+        /usr/bin/suricata -D\
+         -c /etc/suricata/suricata.yaml\
+         --user=suri\
+         --group=suri\
+         --pidfile=/var/run/suricata/suricata.pid\
+         --init-errors-fatal\
+         --af-packet
         echo
 }
 
 # Stop:
 stop() {
-        if [ -f /var/run/suricata.pid ]; then
+        if [ -f /var/run/suricata/suricata.pid ]; then
                 echo -n "Stopping Suricata daemon..."
-                kill $(cat /var/run/suricata.pid)
-                rm -f /var/run/suricata.pid
+                kill $(cat /var/run/suricata/suricata.pid)
+                rm -f /var/run/suricata/suricata.pid
                 echo
         fi
 }
 
 # Reload:
 reload() {
-        if [ -f /var/run/suricata.pid ]; then
+        if [ -f /var/run/suricata/suricata.pid ]; then
                 echo -n "Reloading rules..."
-                kill -USR2 $(cat /var/run/suricata.pid)
+                kill -USR2 $(cat /var/run/suricata/suricata.pid)
                 echo
         fi
 }
@@ -34,7 +40,7 @@ restart() {
 
 # Check if suricata is running
 status() {
-        if [ -f /var/run/suricata.pid ]; then
+        if [ -f /var/run/suricata/suricata.pid ]; then
                 echo "suricata is running."
                 exit 0
         else 
