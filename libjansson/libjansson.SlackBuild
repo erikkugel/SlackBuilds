@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2019
+
+set -e
+
+PRGNAM='libjansson'
+VERSION='2.12'
+APP_URL="http://www.digip.org/jansson/releases/jansson-${VERSION}.tar.bz2"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+CORES="$(nproc --all)"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
+        export CFLAGS="${CFLAGS} -fPIC"
+        export CPPFLAGS="${CPPFLAGS} -fPIC"
+else
+        LIBDIRSUFFIX=''
+fi
+
+# Download latest
+if ! [ -f jansson-${VERSION}.tar.bz2 ]; then
+  wget -nc ${APP_URL}
+fi
+
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -v -x -C ${BUILD_DIR}/src -f jansson-${VERSION}.tar.bz2
+
+# Build
+cd ${BUILD_DIR}/src/jansson-${VERSION}
+./configure \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX}
+
+make install -j${CORES} DESTDIR=${BUILD_DIR}
+cd ${BUILD_DIR} 
+rm -v -r -f ${BUILD_DIR}/src
+
+# Create package
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}

@@ -2,21 +2,21 @@
 #
 # Ernest Kugel, 2018
 
+set -e
+
 PRGNAM='suricata'
 VERSION='4.1.0'
 APP_URL="https://www.openinfosecfoundation.org/download/$PRGNAM-$VERSION.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
-
-set -e
-
+CORES="$(nproc --all)"
 if [ "$(getconf LONG_BIT)" == '64' ]; then
-	LIBDIRSUFFIX='64'
-	export CFLAGS='-fPIC'
-	export CPPFLAGS='-fPIC'
+        LIBDIRSUFFIX='64'
+        export CFLAGS="${CFLAGS} -fPIC"
+        export CPPFLAGS="${CPPFLAGS} -fPIC"
 else
-	LIBDIRSUFFIX=''
-fi  
+        LIBDIRSUFFIX=''
+fi
 
 # Download
 if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then
@@ -33,14 +33,13 @@ cp -v ./rc.suricata ${BUILD_DIR}/etc/rc.d
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
-export DESTDIR=${BUILD_DIR}
 ./configure\
  --prefix=/usr\
  --libdir=/usr/lib64\
  --sysconfdir=/etc\
  --localstatedir=/var\
  --datarootdir=/var/lib
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
+make install -j${CORES} DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR}
 mkdir -v -p etc/suricata
 cp -v src/${PRGNAM}-${VERSION}/classification.config etc/suricata/classification.config.new

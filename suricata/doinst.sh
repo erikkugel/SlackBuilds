@@ -16,7 +16,7 @@ config() {
 
 # Create a user
 if [ -z "$(getent passwd suri)" ]; then
-	/usr/sbin/useradd -r -m -U -c Suricata suri
+	/usr/sbin/useradd -r -U -c Suricata suri
 fi
 
 # Set log folder permissions
