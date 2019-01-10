@@ -25,6 +25,7 @@ fi
 
 # Set log folder permissions
 chown elasticsearch:elasticsearch /usr/share/elasticsearch/plugins\
+ /usr/share/elasticsearch/data\
  /var/lib/elasticsearch\
  /var/log/elasticsearch\
  /var/run/elasticsearch\

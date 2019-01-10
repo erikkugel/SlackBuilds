@@ -22,6 +22,8 @@ tar -v -x -z -C ${BUILD_DIR}/tmp -f ./${PRGNAM}-${VERSION}.tar.gz
 cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -v ./rc.elasticsearch ${BUILD_DIR}/etc/rc.d
+cp -v -f ./elasticsearch.yml ${BUILD_DIR}/tmp/${PRGNAM}-${VERSION}/config
+cp -v -f ./jvm.options ${BUILD_DIR}/tmp/${PRGNAM}-${VERSION}/config
 
 # Stage
 cd ${BUILD_DIR}/tmp/${PRGNAM}-${VERSION}/config

@@ -1,10 +1,16 @@
 #!/bin/bash
 # Start/stop/restart Elasticsearch.
 
+JAVA_HOME=/opt/jdk-11.0.1
+
 # Start:
 start() {
         echo "Starting Elasticsearch..."
-        
+        sudo -s -u elasticsearch\
+         JAVA_HOME=${JAVA_HOME}\
+         ES_PATH_CONF=/etc/elasticsearch\
+         ES_TMPDIR=/tmp/elasticsearch\
+         /usr/share/elasticsearch/bin/elasticsearch -d
 }
 
 # Stop:
