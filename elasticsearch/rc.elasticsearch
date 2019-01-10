@@ -10,24 +10,26 @@ start() {
          JAVA_HOME=${JAVA_HOME}\
          ES_PATH_CONF=/etc/elasticsearch\
          ES_TMPDIR=/tmp/elasticsearch\
-         /usr/share/elasticsearch/bin/elasticsearch -d
+         /usr/share/elasticsearch/bin/elasticsearch\
+         -p /var/run/elasticsearch/elasticsearch.pid\
+         -d
 }
 
 # Stop:
 stop() {
-        if [ -f /var/run/elasticsearch.pid ]; then
+        if [ -f /var/run/elasticsearch/elasticsearch.pid ]; then
                 echo -n "Stopping Elasticsearch daemon..."
-                kill $(cat /var/run/elasticsearch.pid)
-                rm -f /var/run/elasticsearch.pid
+                kill $(cat /var/run/elasticsearch/elasticsearch.pid)
+                rm -f /var/run/elasticsearch/elasticsearch.pid
                 echo
         fi
 }
 
 # Reload:
 reload() {
-        if [ -f /var/run/elasticsearch.pid ]; then
+        if [ -f /var/run/elasticsearch/elasticsearch.pid ]; then
                 echo -n "Reloading rules..."
-                kill -USR2 $(cat /var/run/elasticsearch.pid)
+                kill -USR2 $(cat /var/run/elasticsearch/elasticsearch.pid)
                 echo
         fi
 }
@@ -39,7 +41,7 @@ restart() {
 
 # Check if elasticsearch is running
 status() {
-        if [ -f /var/run/elasticsearch.pid ]; then
+        if [ -f /var/run/elasticsearch/elasticsearch.pid ]; then
                 echo "elasticsearch is running."
                 exit 0
         else 

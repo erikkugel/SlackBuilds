@@ -24,14 +24,15 @@ if [ -z "$(getent passwd elasticsearch)" ]; then
 fi
 
 # Set log folder permissions
-chown elasticsearch:elasticsearch /usr/share/elasticsearch/plugins\
+chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins\
  /usr/share/elasticsearch/data\
+ /etc/elasticsearch\
  /var/lib/elasticsearch\
  /var/log/elasticsearch\
  /var/run/elasticsearch\
  /tmp/elasticsearch
 
 # Install configs and symlinks
-for CONFIG in /etc/elasticsearch/*; do
+for CONFIG in /etc/elasticsearch/*.new; do
         config ${CONFIG}
 done
