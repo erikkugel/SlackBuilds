@@ -25,15 +25,6 @@ stop() {
         fi
 }
 
-# Reload:
-reload() {
-        if [ -f /var/run/elasticsearch/elasticsearch.pid ]; then
-                echo -n "Reloading rules..."
-                kill -USR2 $(cat /var/run/elasticsearch/elasticsearch.pid)
-                echo
-        fi
-}
-
 # Restart:
 restart() {
         stop && start

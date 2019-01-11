@@ -9,7 +9,6 @@ BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
 
 set -e
-set -x
 
 # Download
 if ! [ -f ${PRGNAM}-${VERSION}.tar.gz ]; then

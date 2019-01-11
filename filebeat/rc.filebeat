@@ -1,0 +1,57 @@
+#!/bin/bash
+# Start/stop/restart Filebeat.
+
+# Start:
+start() {
+        echo "Starting Filebeat..."
+        /usr/bin/filebeat\
+         --path.config /etc/filebeat\
+         --path.data /var/lib/filebeat\
+         --path.home /usr/share/filebeat\
+         --path.logs /var/log/filebeat &
+         echo $! > /var/run/filebeat.pid
+        echo
+}
+
+# Stop:
+stop() {
+        if [ -f /var/run/filebeat.pid ]; then
+                echo "Stopping Filebeat..."
+                kill $(cat /var/run/filebeat.pid)
+                rm /var/run/filebeat.pid
+        fi
+}
+
+# Restart:
+restart() {
+        stop && start
+}
+
+# Check if filebeat is running
+status() {
+        if [ -f /var/run/filebeat.pid ]; then
+                echo "filebeat is running."
+                exit 0
+        else 
+                echo "filebeat is stopped."
+                exit 1
+        fi
+}
+
+case "$1" in
+'start')
+        start
+        ;;
+'stop')
+        stop
+        ;;
+'restart')
+        restart
+        ;;
+'status')
+        status
+        ;;
+*)
+        echo "usage $0 start|stop|reload|restart|status"
+        ;;
+esac

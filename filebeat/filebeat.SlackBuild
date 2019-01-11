@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2019
+
+PRGNAM='filebeat'
+VERSION='6.5.4'
+APP_URL="https://artifacts.elastic.co/downloads/filebeat/${PRGNAM}-${VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+set -e
+
+# Download
+if ! [ -f ${PRGNAM}-${VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz ]; then
+        wget ${APP_URL}
+fi
+mkdir -v -p ${BUILD_DIR}/install\
+ ${BUILD_DIR}/etc/rc.d\
+ ${BUILD_DIR}/tmp
+tar -v -x -z -C ${BUILD_DIR}/tmp -f ./${PRGNAM}-${VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz
+cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v ./rc.filebeat ${BUILD_DIR}/etc/rc.d
+
+# Stage
+cd ${BUILD_DIR}/tmp/${PRGNAM}-${VERSION}-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)
+mkdir -v -p ${BUILD_DIR}/usr/bin ${BUILD_DIR}/etc/filebeat ${BUILD_DIR}/usr/share/filebeat
+cp -v -a filebeat ${BUILD_DIR}/usr/bin
+cp -v -a filebeat.yml ${BUILD_DIR}/etc/filebeat/filebeat.yml.new
+cp -v -a fields.yml ${BUILD_DIR}/etc/filebeat/fields.yml.new
+cp -v -a modules.d ${BUILD_DIR}/etc/filebeat
+cp -v -a LICENSE.txt ${BUILD_DIR}/usr/share/filebeat
+cp -v -a NOTICE.txt ${BUILD_DIR}/usr/share/filebeat
+cp -v -a README.md ${BUILD_DIR}/usr/share/filebeat
+cp -v -a filebeat.reference.yml ${BUILD_DIR}/usr/share/filebeat
+cp -v -a kibana ${BUILD_DIR}/usr/share/filebeat
+cp -v -a module ${BUILD_DIR}/usr/share/filebeat
+
+# Create package
+cd ${BUILD_DIR}
+rm -r -f tmp
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
