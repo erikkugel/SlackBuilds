@@ -1,10 +1,12 @@
 #!/bin/bash
 # Start/stop/restart Kibana.
 
+export KIBANA_HOME=/usr/share/kibana
+
 # Start:
 start() {
         echo "Starting Kibana..."
-        sudo -s -u kibana /usr/share/kibana/bin/kibana --config /etc/kibana/kibana.yml &
+        sudo -s -u kibana ${KIBANA_HOME}/bin/kibana --config /etc/kibana/kibana.yml &
 }
 
 # Stop:
