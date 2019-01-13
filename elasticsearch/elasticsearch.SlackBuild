@@ -41,7 +41,6 @@ cp -v -a tmp/${PRGNAM}-${VERSION}/lib usr/share/elasticsearch
 cp -v -a tmp/${PRGNAM}-${VERSION}/modules usr/share/elasticsearch
 rm -r -f tmp
 mkdir -v -p usr/share/elasticsearch/plugins\
- usr/share/elasticsearch/data\
  var/lib/elasticsearch\
  var/log/elasticsearch\
  var/run/elasticsearch\
