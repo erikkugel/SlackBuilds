@@ -1,24 +1,32 @@
 #!/bin/bash
-# Start/stop/restart Filebeat.
+# Init script for Filebeat.
+
+PRGNAM=filebeat
+CMD=/usr/bin/filebeat
+PATH_CONFIG=/etc/filebeat
+PATH_DATA=/var/lib/filebeat
+PATH_HOME=/usr/share/filebeat
+PATH_LOGS=/var/log/filebeat
+PID_FILE=/var/run/filebeat.pid
 
 # Start:
 start() {
-        echo "Starting Filebeat..."
-        /usr/bin/filebeat\
-         --path.config /etc/filebeat\
-         --path.data /var/lib/filebeat\
-         --path.home /usr/share/filebeat\
-         --path.logs /var/log/filebeat &
-         echo $! > /var/run/filebeat.pid
+        echo "Starting ${PRGNAM}..."
+        ${CMD}\
+         --path.config ${PATH_CONFIG}\
+         --path.data ${PATH_DATA}\
+         --path.home ${PATH_HOME}\
+         --path.logs ${PATH_LOGS} &
+         echo $! > ${PID_FILE}
         echo
 }
 
 # Stop:
 stop() {
-        if [ -f /var/run/filebeat.pid ]; then
-                echo "Stopping Filebeat..."
-                kill $(cat /var/run/filebeat.pid)
-                rm /var/run/filebeat.pid
+        if [ -f ${PID_FILE} ]; then
+                echo "Stopping ${PRGNAM}..."
+                kill $(cat ${PID_FILE})
+                rm ${PID_FILE}
         fi
 }
 
@@ -27,13 +35,25 @@ restart() {
         stop && start
 }
 
+# Setup:
+setup() {
+        echo "Setting up ${PRGNAM}..."
+        ${CMD}\
+         --path.config ${PATH_CONFIG}\
+         --path.data ${PATH_DATA}\
+         --path.home ${PATH_HOME}\
+         --path.logs ${PATH_LOGS} setup -e
+        echo
+}
+
+
 # Check if filebeat is running
 status() {
-        if [ -f /var/run/filebeat.pid ]; then
-                echo "filebeat is running."
+        if [ -f ${PID_FILE} ]; then
+                echo "${PRGNAM} is running."
                 exit 0
         else 
-                echo "filebeat is stopped."
+                echo "${PRGNAM} is stopped."
                 exit 1
         fi
 }
@@ -48,10 +68,14 @@ case "$1" in
 'restart')
         restart
         ;;
+'setup')
+        setup
+        ;;
+
 'status')
         status
         ;;
 *)
-        echo "usage $0 start|stop|reload|restart|status"
+        echo "usage $0 start|stop|restart|setup|status"
         ;;
 esac
