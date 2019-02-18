@@ -4,16 +4,18 @@
 
 PRGNAM='nut'
 VERSION='2.7.4'
-APP_URL=http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+APP_URL="http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
 
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'        
+        export CFLAGS='-fPIC'
+        export CPPFLAGS='-fPIC'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Download
@@ -22,6 +24,10 @@ mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR
 if ! [ -f ./${PRGNAM}-${VERSION}.tar.gz ]; then
 	wget ${APP_URL} -O ${PRGNAM}-${VERSION}.tar.gz
 fi
+gpg --batch --fetch-keys http://www.networkupstools.org/source/nut-key.gpg
+wget -nc http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz.sig
+gpg --batch --verify ${PRGNAM}-${VERSION}.tar.gz.sig ${PRGNAM}-${VERSION}.tar.gz || exit 99
+
 tar -v -x -z -C ${BUILD_DIR}/src -f ./nut-${VERSION}.tar.gz
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
@@ -33,7 +39,9 @@ cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 	--libdir=/usr/lib${LIBDIRSUFFIX} \
 	--sysconfdir=/etc \
 	--with-user=ups \
-	--with-group=nut
+	--with-group=nut \
+        --with-udev-dir=/etc/udev
+
 make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
 make check
 make install DESTDIR=${BUILD_DIR}

@@ -40,17 +40,23 @@ ups_status() {
   if [ -e /var/state/ups/upsd.pid ]; then
     echo "UPS daemon is running."
   else 
-    echo "ups is stopped."
+    echo "UPS is stopped."
   fi
   echo -n "UPS status: "
   for UPS in $(/usr/bin/upsc -l); do
   	/usr/bin/upsc ${UPS}@localhost ups.status
   done
   if [ -e /var/run/upsmon.pid ]; then
-    echo "UPS monitor is running."
+    echo "UPS Monitor is running."
   else 
-    echo "ups is stopped."
+    echo "UPS Monitor is stopped."
   fi
+}
+
+ups_test() {
+        echo "Simulating UPS shutdown sequence..."
+        /usr/sbin/upsdrvctl -t shutdown
+        echo "Done."
 }
 
 case "$1" in
@@ -69,6 +75,9 @@ case "$1" in
 'status')
   ups_status
   ;;
+'test')
+  ups_test
+  ;;
 *)
-  echo "usage $0 start|stop|restart|status"
+  echo "usage $0 start|stop|restart|status|test"
 esac
