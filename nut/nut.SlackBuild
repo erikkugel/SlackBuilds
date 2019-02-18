@@ -19,7 +19,7 @@ else
 fi
 
 # Download
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/usr/bin
 
 if ! [ -f ./${PRGNAM}-${VERSION}.tar.gz ]; then
 	wget ${APP_URL} -O ${PRGNAM}-${VERSION}.tar.gz
@@ -32,6 +32,7 @@ tar -v -x -z -C ${BUILD_DIR}/src -f ./nut-${VERSION}.tar.gz
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -v -f ./rc.ups ${BUILD_DIR}/etc/rc.d/rc.ups
+cp -v -f ./ups_notify.sh ${BUILD_DIR}/usr/bin/ups_notify.sh
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
