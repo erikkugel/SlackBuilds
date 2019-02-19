@@ -1,12 +1,14 @@
 #!/bin/bash
 
-TO='admin@example.com'
-SMTP='smtp.example.com'
+if [ -z ${1} ] || [ -z ${2} ] || [ -z ${3} ]; then
+        echo "Usage: `basename $0` < email > < smtp relay > < subject >"
+        exit 1
+fi
 
 for UPS in `upsc -l`; do
-	echo "${UPS}: `upsc ${UPS} ups.status`"
+        echo "${UPS}: `upsc ${UPS} ups.status`"
 done | mailx -v\
-       	-r ${TO}\
-       	-s "$*"\
-       	-S smtp=${SMTP}\
-       	${TO}
+        -r "`basename $0`@`hostname -f`"\
+        -s "${3}"\
+        -S smtp="${2}"\
+        "${1}"
