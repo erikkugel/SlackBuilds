@@ -1,0 +1,81 @@
+#!/bin/bash
+# Init script for metricbeat.
+
+PRGNAM=metricbeat
+CMD=/usr/bin/metricbeat
+PATH_CONFIG=/etc/metricbeat
+PATH_DATA=/var/lib/metricbeat
+PATH_HOME=/usr/share/metricbeat
+PATH_LOGS=/var/log/metricbeat
+PID_FILE=/var/run/metricbeat.pid
+
+# Start:
+start() {
+        echo "Starting ${PRGNAM}..."
+        ${CMD}\
+         --path.config ${PATH_CONFIG}\
+         --path.data ${PATH_DATA}\
+         --path.home ${PATH_HOME}\
+         --path.logs ${PATH_LOGS} &
+         echo $! > ${PID_FILE}
+        echo
+}
+
+# Stop:
+stop() {
+        if [ -f ${PID_FILE} ]; then
+                echo "Stopping ${PRGNAM}..."
+                kill $(cat ${PID_FILE})
+                rm ${PID_FILE}
+        fi
+}
+
+# Restart:
+restart() {
+        stop && start
+}
+
+# Setup:
+setup() {
+        echo "Setting up ${PRGNAM}..."
+        ${CMD}\
+         --path.config ${PATH_CONFIG}\
+         --path.data ${PATH_DATA}\
+         --path.home ${PATH_HOME}\
+         --path.logs ${PATH_LOGS} setup -e
+        echo
+}
+
+
+# Check if metricbeat is running
+status() {
+        if [ -f ${PID_FILE} ]; then
+                echo "${PRGNAM} is running."
+                exit 0
+        else 
+                echo "${PRGNAM} is stopped."
+                exit 1
+        fi
+}
+
+case "$1" in
+'start')
+        start
+        ;;
+'stop')
+        stop
+        ;;
+'restart')
+        restart
+        ;;
+'setup')
+        setup
+        ;;
+
+'status')
+        status
+        ;;
+*)
+        echo "usage $0 start|stop|restart|setup|status"
+        ;;
+esac
