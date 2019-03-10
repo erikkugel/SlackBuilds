@@ -1,0 +1,54 @@
+#!/bin/bash
+# Start/stop/restart Kibana.
+
+export KIBANA_HOME=/usr/share/kibana
+
+# Start:
+start() {
+        echo "Starting Kibana..."
+        sudo -s -u kibana ${KIBANA_HOME}/bin/kibana --config /etc/kibana/kibana.yml &
+}
+
+# Stop:
+stop() {
+        if [ -f /var/run/kibana/kibana.pid ]; then
+                echo -n "Stopping Kibana daemon..."
+                kill $(cat /var/run/kibana/kibana.pid)
+                rm -f /var/run/kibana/kibana.pid
+                echo
+        fi
+}
+
+# Restart:
+restart() {
+        stop && start
+}
+
+# Check if kibana is running
+status() {
+        if [ -f /var/run/kibana/kibana.pid ]; then
+                echo "kibana is running."
+                exit 0
+        else 
+                echo "kibana is stopped."
+                exit 1
+        fi
+}
+
+case "$1" in
+'start')
+        start
+        ;;
+'stop')
+        stop
+        ;;
+'restart')
+        restart
+        ;;
+'status')
+        status
+        ;;
+*)
+        echo "usage $0 start|stop|restart|status"
+        ;;
+esac

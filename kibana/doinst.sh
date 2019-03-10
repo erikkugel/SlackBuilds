@@ -19,19 +19,16 @@ config() {
 }
 
 # Create a user
-if [ -z "$(getent passwd elasticsearch)" ]; then
-	/usr/sbin/useradd -r -U -c Elasticsearch elasticsearch
+if [ -z "$(getent passwd kibana)" ]; then
+	/usr/sbin/useradd -r -U -c Kibana kibana
 fi
 
 # Set log folder permissions
-chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins\
- /etc/elasticsearch\
- /var/lib/elasticsearch\
- /var/log/elasticsearch\
- /var/run/elasticsearch\
- /tmp/elasticsearch
+chown -R kibana:kibana /usr/share/kibana\
+ /etc/kibana\
+ /var/lib/kibana\
+ /var/run/kibana\
+ /var/log/kibana
 
 # Install configs and symlinks
-for CONFIG in /etc/elasticsearch/*.new; do
-        config ${CONFIG}
-done
+config /etc/kibana/kibana.yml.new
