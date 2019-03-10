@@ -1,15 +1,14 @@
 #!/bin/bash
 # Start/stop/restart Elasticsearch.
 
-JAVA_HOME=/usr/lib64/java
+export JAVA_HOME=/usr/lib64/java
+export ES_PATH_CONF=/etc/elasticsearch
+export ES_TMPDIR=/tmp/elasticsearch
 
 # Start:
 start() {
         echo "Starting Elasticsearch..."
-        sudo -s -u elasticsearch\
-         JAVA_HOME=${JAVA_HOME}\
-         ES_PATH_CONF=/etc/elasticsearch\
-         ES_TMPDIR=/tmp/elasticsearch\
+        sudo -E -s -u elasticsearch\
          /usr/share/elasticsearch/bin/elasticsearch\
          -p /var/run/elasticsearch/elasticsearch.pid\
          -d
@@ -21,6 +20,15 @@ stop() {
                 echo -n "Stopping Elasticsearch daemon..."
                 kill $(cat /var/run/elasticsearch/elasticsearch.pid)
                 rm -f /var/run/elasticsearch/elasticsearch.pid
+                echo
+        fi
+}
+
+# Reload:
+reload() {
+        if [ -f /var/run/elasticsearch/elasticsearch.pid ]; then
+                echo -n "Reloading rules..."
+                kill -USR2 $(cat /var/run/elasticsearch/elasticsearch.pid)
                 echo
         fi
 }
@@ -41,6 +49,11 @@ status() {
         fi
 }
 
+plugin() {
+	sudo -E -s -u elasticsearch\
+	 /usr/share/elasticsearch/bin/elasticsearch-plugin "$@"
+}
+
 case "$1" in
 'start')
         start
@@ -57,6 +70,9 @@ case "$1" in
 'status')
         status
         ;;
+'plugin')
+	plugin "${@:2}"
+	;;
 *)
         echo "usage $0 start|stop|reload|restart|status"
         ;;
