@@ -36,16 +36,24 @@ restart() {
 }
 
 # Setup:
-setup() {
-        echo "Setting up ${PRGNAM}..."
+modules() {
+        echo "Modules for ${PRGNAM}..."
         ${CMD}\
          --path.config ${PATH_CONFIG}\
          --path.data ${PATH_DATA}\
          --path.home ${PATH_HOME}\
-         --path.logs ${PATH_LOGS} setup -e
+         --path.logs ${PATH_LOGS} modules "$@"
         echo
 }
 
+setup() {
+        echo "Setup ${PRGNAM}..."
+        ${CMD}\
+         --path.config ${PATH_CONFIG}\
+         --path.data ${PATH_DATA}\
+         --path.home ${PATH_HOME}\
+         --path.logs ${PATH_LOGS} setup "$@"
+}
 
 # Check if metricbeat is running
 status() {
@@ -68,14 +76,16 @@ case "$1" in
 'restart')
         restart
         ;;
-'setup')
-        setup
+'modules')
+        modules "${@:2}"
         ;;
-
+'setup')
+        setup "${@:2}"
+        ;;
 'status')
         status
         ;;
 *)
-        echo "usage $0 start|stop|restart|setup|status"
+        echo "usage $0 start|stop|restart|modules|status"
         ;;
 esac

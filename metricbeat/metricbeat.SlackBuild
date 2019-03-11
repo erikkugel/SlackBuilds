@@ -28,6 +28,7 @@ mkdir -v -p ${BUILD_DIR}/usr/bin ${BUILD_DIR}/etc/metricbeat ${BUILD_DIR}/usr/sh
 cp -v -a metricbeat ${BUILD_DIR}/usr/bin
 cp -v -a metricbeat.yml ${BUILD_DIR}/etc/metricbeat/metricbeat.yml.new
 cp -v -a fields.yml ${BUILD_DIR}/etc/metricbeat/fields.yml.new
+cp -v -a modules.d ${BUILD_DIR}/etc/metricbeat/modules.d
 cp -v -a LICENSE.txt ${BUILD_DIR}/usr/share/metricbeat
 cp -v -a NOTICE.txt ${BUILD_DIR}/usr/share/metricbeat
 cp -v -a README.md ${BUILD_DIR}/usr/share/metricbeat
