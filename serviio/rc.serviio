@@ -1,0 +1,20 @@
+#!/bin/bash
+# Start/stop/restart Serviio.
+
+export JAVA_HOME=/usr/lib/java
+
+# Start:
+start() {
+        echo "Starting Serviio..."
+        sudo -E -s -u serviio\
+         /usr/share/serviio-2.0/bin/serviio.sh >>/tmp/serviio.out 2>&1 &
+}
+
+case "$1" in
+'start')
+        start
+        ;;
+*)
+        echo "usage $0 start"
+        ;;
+esac

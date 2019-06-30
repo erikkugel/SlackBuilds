@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2019
+
+PRGNAM='serviio'
+VERSION='2.0'
+APP_URL="http://download.serviio.org/releases/${PRGNAM}-${VERSION}-linux.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+set -e
+
+# Download
+if ! [ -f ${PRGNAM}-${VERSION}-linux.tar.gz ]; then
+        wget ${APP_URL}
+fi
+mkdir -v -p ${BUILD_DIR}/install\
+ ${BUILD_DIR}/etc/rc.d\
+ ${BUILD_DIR}/usr/share
+tar -v -x -z -C ${BUILD_DIR}/usr/share -f ./${PRGNAM}-${VERSION}-linux.tar.gz
+mv ${BUILD_DIR}/usr/share/serviio-2.0/bin/serviio.sh ${BUILD_DIR}/usr/share/serviio-2.0/bin/serviio.sh.new
+cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v ./rc.serviio ${BUILD_DIR}/etc/rc.d
+
+# Create package
+cd ${BUILD_DIR}
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}

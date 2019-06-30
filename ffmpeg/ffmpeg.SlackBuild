@@ -2,18 +2,18 @@
 #
 # Ernest Kugel, 2014
 
-PRGNAM="ffmpeg"
-VERSION="latest"
-APP_URL=git://source.ffmpeg.org/ffmpeg.git
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+PRGNAM='ffmpeg'
+VERSION='latest'
+APP_URL='https://github.com/FFmpeg/FFmpeg.git'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
 
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Download
@@ -42,10 +42,9 @@ chown -Rc root:root .
 	--enable-shared
 
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
-cd ${BUILD_DIR} 
+cd ${BUILD_DIR}
 rm -v -r -f ${BUILD_DIR}/src
 
 # Create package
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}
-
