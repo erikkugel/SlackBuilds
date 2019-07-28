@@ -1,10 +1,10 @@
 #!/bin/sh -e
 
 PRGNAM='shorewall'
-VERSION='5.1.8'
-TAG=1_x
-APP_URL=http://www.shorewall.org/pub/shorewall/$(echo ${VERSION} | grep -Po '^\d*\.\d*')/shorewall-${VERSION}/${PRGNAM}-${VERSION}.tgz
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
+VERSION='5.2.3.3'
+TAG='1_x'
+APP_URL='http://canada.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-5.2.3.3.tgz'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 
 # Download
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
