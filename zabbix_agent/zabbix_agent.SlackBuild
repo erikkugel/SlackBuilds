@@ -2,7 +2,7 @@
 #
 # Ernest Kugel, 2020
 
-PRGNAM='zabbix_server'
+PRGNAM='zabbix_agent'
 VERSION='4.0.20'
 APP_URL="https://cdn.zabbix.com/zabbix/sources/stable/4.0/zabbix-${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
@@ -26,23 +26,18 @@ if [ -d ./zabbix-${VERSION} ]; then
 fi
 tar -vxf ./zabbix-${VERSION}.tar.gz
 
-mkdir -vp ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc ${BUILD_DIR}/srv/httpd/htdocs ${BUILD_DIR}/usr/share/zabbix/databasescripts/mysql
-cp -v ./slack-desc ${BUILD_DIR}/install
-cp -v ./doinst.sh ${BUILD_DIR}/install
+mkdir -vp ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc 
+cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -aRv ./zabbix-${VERSION} ${BUILD_DIR}/src
-cp -aRv ./zabbix-${VERSION}/frontends/php ${BUILD_DIR}/srv/httpd/htdocs/zabbix
-cp -v ./zabbix-${VERSION}/database/mysql/*.sql ${BUILD_DIR}/usr/share/zabbix/databasescripts/mysql
-cp -v ./mkdb.sh ${BUILD_DIR}/usr/share/zabbix/databasescripts/mysql
-cp -v ${BUILD_DIR}/src/zabbix-${VERSION}/conf/zabbix_server.conf ${BUILD_DIR}/etc
+cp -v ${BUILD_DIR}/src/zabbix-${VERSION}/conf/zabbix_agentd.conf ${BUILD_DIR}/etc
 chown -Rc root:root ${BUILD_DIR}
 
 # Build
 cd ${BUILD_DIR}/src/zabbix-${VERSION}
-./configure  --prefix=/usr \
+./configure --prefix=/usr \
         --libdir=/usr/lib${LIBDIRSUFFIX} \
         --sysconfdir=/etc \
-        --enable-server \
-        --with-mysql
+        --enable-agent
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -vrf ${BUILD_DIR}/src
