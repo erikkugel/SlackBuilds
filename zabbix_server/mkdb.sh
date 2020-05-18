@@ -1,4 +1,4 @@
-set -e -x
+set -e
 
 echo 'Checking for database, provide root password: '
 read -s -p 'MySQL root password: ' MYSQL_PASSWD
