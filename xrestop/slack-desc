@@ -1,0 +1,11 @@
+xrestop: xrestop
+xrestop: 
+xrestop: Xrestop uses the X-Resource extension to provide 'top' like statistics
+xrestop: of each connected X11 client's server side resource usage. 
+xrestop: It is intended as a developer tool to aid more efficient server resource usage
+xrestop: and debug server side leakage. 
+xrestop: It should work with any server supporting the X-Resource extension,
+xrestop: including the Xorg server and XFree86 4.3+.
+xrestop:
+xrestop: https://www.freedesktop.org/wiki/Software/xrestop/
+xrestop:

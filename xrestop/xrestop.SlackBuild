@@ -1,0 +1,31 @@
+#!/bin/bash -e
+
+PRGNAM='xrestop'
+VER='0.5'
+TAG='1_x'
+URL="https://xorg.freedesktop.org/archive/individual/app/${PRGNAM}-${VER}.tar.bz2"
+BUILDDIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+  LIBDIRSUFFIX='64'
+else
+  LIBDIRSUFFIX=''
+fi
+
+# Download
+if ! [ -f "${PRGNAM}-${VER}.tar.bz2" ]; then
+  wget "${URL}"
+fi
+mkdir -v -p "${BUILDDIR}/install" && cp -v ./slack-desc "${BUILDDIR}/install"
+mkdir "${BUILDDIR}/src" && tar -xjf "${PRGNAM}-${VER}".tar.bz2 -C "${BUILDDIR}/src"
+
+# Create package
+cd "${BUILDDIR}/src/${PRGNAM}-${VER}"
+./configure --prefix=/usr/local --libdir="/usr/local/lib${LIBDIRSUFFIX}"
+make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR="${BUILDDIR}"
+cd "${BUILDDIR}"
+rm -v -r -f "${BUILDDIR}/src"
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VER}-$(uname -m)-${TAG}.txz"
+
+# Cleanup
+rm -v -r -f "${BUILDDIR}"
+
