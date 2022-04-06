@@ -20,7 +20,7 @@ mkdir "${BUILDDIR}/src" && tar -xjf "${PRGNAM}-${VER}".tar.bz2 -C "${BUILDDIR}/s
 
 # Create package
 cd "${BUILDDIR}/src/${PRGNAM}-${VER}"
-./configure --prefix=/usr/local --libdir="/usr/local/lib${LIBDIRSUFFIX}"
+./configure --prefix=/usr --libdir="/usr/lib${LIBDIRSUFFIX}"
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR="${BUILDDIR}"
 cd "${BUILDDIR}"
 rm -v -r -f "${BUILDDIR}/src"
