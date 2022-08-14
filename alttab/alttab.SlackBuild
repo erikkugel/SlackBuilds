@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+
+PRGNAM='alttab'
+VERSION='1.6.1'
+APP_URL="https://github.com/sagb/${PRGNAM}/archive/refs/tags/v${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "v${VERSION}.tar.gz" ]; then
+	wget -nc ${APP_URL}
+fi
+mkdir -v -p "${BUILD_DIR}/install" "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/src"
+
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -v -x -f "./v${VERSION}.tar.gz" -C "${BUILD_DIR}/src"
+
+# Build
+cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+./configure --prefix=/usr
+make install DESTDIR=${BUILD_DIR}
+
+# Package
+cd ${BUILD_DIR}
+rm -r -f ./src
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
+rm -v -r -f "${BUILD_DIR}"
+

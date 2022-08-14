@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+
+PRGNAM='uthash'
+VERSION='2.3.0'
+APP_URL="https://github.com/troydhanson/${PRGNAM}/archive/refs/tags/v${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "v${VERSION}.tar.gz" ]; then
+	wget -nc ${APP_URL}
+fi
+mkdir -v -p "${BUILD_DIR}/install" "${BUILD_DIR}/src" "${BUILD_DIR}/usr/include"
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -vxf "v${VERSION}.tar.gz" -C "${BUILD_DIR}/src"
+cp ${BUILD_DIR}/src/${PRGNAM}-${VERSION}/src/*.h "${BUILD_DIR}/usr/include"
+
+# Package
+cd ${BUILD_DIR}
+rm -r -f ./src
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-noarch-${TAG}.txz"
+rm -v -r -f "${BUILD_DIR}"
+
