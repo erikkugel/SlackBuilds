@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+
+PRGNAM='docker'
+VERSION='20.10.17'
+APP_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "docker-${VERSION}.tgz" ]; then
+	wget -nc ${APP_URL}
+fi
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/usr/bin
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -vxf "docker-${VERSION}.tgz" -C ${BUILD_DIR}
+cp ${BUILD_DIR}/docker/* ${BUILD_DIR}/usr/bin
+
+# Package
+cd ${BUILD_DIR}
+rm -r -f ./docker
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
+
