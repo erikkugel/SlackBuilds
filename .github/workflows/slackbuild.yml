@@ -20,6 +20,14 @@ jobs:
           echo "PWD: $(pwd)"
           echo "LS: $(ls -1a)"
 
+      - id: ghcr_login
+        name: GitHub Container Registry Login
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - id: slackbuild_alttab
         name: SlackBuild alttab
         uses: ./.github/actions/slackbuild
