@@ -29,7 +29,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: docker pull ghcr.io/erikkugel/slackbuild:0.0.1
+      - run: |
+          docker pull ghcr.io/erikkugel/slackbuild:0.0.1
+          mkdir packages
       
       - id: slackbuild_alttab
         name: SlackBuild alttab
