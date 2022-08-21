@@ -18,4 +18,10 @@ jobs:
       - id: debug
         run: |
           echo "PWD: $(pwd)"
-          echo "LS: $(ls -1)"
+          echo "LS: $(ls -1a)"
+
+      - id: slackbuild_alttab
+        name: SlackBuild alttab
+        uses: ./.github/actions/slackbuild
+        with:
+          target: "uthash,alttab"
