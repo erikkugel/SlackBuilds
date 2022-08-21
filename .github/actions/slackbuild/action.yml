@@ -7,4 +7,4 @@ runs:
   using: 'docker'
   image: 'ghcr.io/erikkugel/slackbuild:0.0.1'
   args:
-    - ${{ inputs.target }}
+    - /entrypoint.sh ${{ inputs.target }}
