@@ -19,6 +19,7 @@ jobs:
         run: |
           echo "PWD: $(pwd)"
           echo "LS: $(ls -1a)"
+          docker logout
 
       - id: ghcr_login
         name: GitHub Container Registry Login
