@@ -1,0 +1,21 @@
+on:
+  push:
+    paths:
+      - .github/workflows/slackbuild.yml
+      - .github/actions/slackbuild/action.yml
+  workflow_dispatch:
+
+jobs:
+  slackbuild:
+    steps:
+      - id: checkout
+        name: Checkout SlackBuilds
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - id: alttab
+        name: alttab
+        uses: .github/actions/slackbuild
+        with:
+          target: 'uthash,alttab'

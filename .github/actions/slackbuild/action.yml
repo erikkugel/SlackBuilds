@@ -1,0 +1,10 @@
+name: SlackBuild
+description: 'Execute a SlackBuild script'
+inputs:
+  target:
+    description: 'One or more packages to build, comma-delimited'
+runs:
+  using: 'docker'
+  image: 'ghcr.io/erikkugel/slackbuild:0.0.1'
+  args:
+    - ${{ inputs.target }}

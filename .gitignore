@@ -1,12 +1,28 @@
-!/.github/**
-.*
+# Ignore VIM buffers
+.*.un~
 *~
+*.swp
+
+# Ignore source code archives
 *.tar.gz
 *.tar.bz2
 *.tar.xz
 *.tgz
 *.txz
+
+# Ignore source control configurations of external repositories
 */.svn
 */.git
-package-lock.json
+
+# Ignore extracted source code
 */*/
+
+# Ignore NodeJS package locks
+package-lock.json
+
+# Do NOT ignore GitHub Actions
+!.github/workflows
+!.github/workflows/*.y[a]ml
+!.github/actions
+!.github/actions/*/action.y[a]ml
+!.github/actions/*/README.md
