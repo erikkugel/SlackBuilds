@@ -8,8 +8,8 @@ on:
       - '**/*.SlackBuild'
       - '**/slack-desc'
       - '**/doinst.sh'
-    branches:
-      - master
+        #  branches:
+        # - master
   workflow_dispatch:
     inputs:
       target:
