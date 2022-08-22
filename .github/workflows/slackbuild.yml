@@ -38,5 +38,6 @@ jobs:
       - id: upload_artifact
         name: Upload Artifact
         uses: actions/upload-artifact@v3
+        with:
           name: packages
           path: ./packages/*.txz
