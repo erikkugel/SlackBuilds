@@ -32,6 +32,7 @@ jobs:
         name: Targets
         shell: bash
         run: |
+          set -x
           if [ "${GITHUB_EVENT}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
           else
