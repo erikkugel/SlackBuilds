@@ -1,0 +1,34 @@
+name: Build
+description: Build slackpkg using Docker image
+inputs:
+  targets:
+    required: true
+    description: Targets to build
+runs:
+  - id: ghcr_login
+    name: GitHub Container Registry Login
+    uses: docker/login-action@v2
+    with:
+      registry: ghcr.io
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
+
+  - id: docker_pull
+    name: Docker Pull
+    run: |
+      docker pull ghcr.io/erikkugel/slackbuild:0.0.1
+      mkdir -v packages
+
+  - id: slackbuild_alttab
+    if: ${{ steps.targets.outputs.targets != '' }}
+    name: SlackBuild alttab
+    uses: ./.github/actions/slackbuild
+    with:
+      target: ${{ inputs.targets }}
+
+  - id: upload_artifact
+    name: Upload Artifact
+    uses: actions/upload-artifact@v3
+    with:
+      name: packages
+      path: ./packages/*.txz
