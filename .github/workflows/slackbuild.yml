@@ -15,6 +15,12 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - id: git_diff
+        name: Changed Files
+        shell: bash
+        run: |
+          git 
+
       - id: ghcr_login
         name: GitHub Container Registry Login
         uses: docker/login-action@v2
