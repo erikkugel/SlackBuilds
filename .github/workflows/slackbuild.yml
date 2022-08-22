@@ -15,12 +15,6 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - id: debug
-        run: |
-          echo "PWD: $(pwd)"
-          echo "LS: $(ls -1a)"
-          docker logout
-
       - id: ghcr_login
         name: GitHub Container Registry Login
         uses: docker/login-action@v2
@@ -29,12 +23,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: |
+      - id: docker_pull
+        name: Docker Pull
+        run: |
           docker pull ghcr.io/erikkugel/slackbuild:0.0.1
-          mkdir packages
+          mkdir -v packages
       
       - id: slackbuild_alttab
         name: SlackBuild alttab
         uses: ./.github/actions/slackbuild
         with:
           target: "uthash,alttab"
+
+      - id: upload_artifact
+        name: Upload Artifact
+        uses: actions/upload-artifact@v3
+          name: packages
+          path: ./packages/*.txz
