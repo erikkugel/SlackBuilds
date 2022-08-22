@@ -33,7 +33,7 @@ jobs:
         name: SlackBuild alttab
         uses: ./.github/actions/slackbuild
         with:
-          target: "uthash,alttab"
+          target: "docker,uthash,alttab,lshw,xrestop,jq,keepassxc"
 
       - id: upload_artifact
         name: Upload Artifact
