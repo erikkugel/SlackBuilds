@@ -3,9 +3,9 @@ on:
     paths:
       - .github/workflows/slackbuild.yml
       - .github/actions/slackbuild/action.yml
-      - **/*.SlackBuild
-      - **/slack-desc
-      - **/doinst.sh
+      - '**/*.SlackBuild'
+      - '**/slack-desc'
+      - '**/doinst.sh'
     branches:
       - master
   workflow_dispatch:
