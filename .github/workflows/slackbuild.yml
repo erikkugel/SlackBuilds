@@ -39,14 +39,14 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" == 'push' ]; then
             git diff --diff-filter=AM --name-only HEAD^ | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; } > ./diff.txt
             while read SLACKBUILD; do
-              basename "$(dirname $SLACKBUILD)" >> ./targets.txt
+              cat "$(dirname $SLACKBUILD)/dependecies.txt" >> ./slackbuilds.txt
+              basename "$(dirname $SLACKBUILD)" >> ./slackbuilds.txt
             done < ./diff.txt
-            if [ -f ./targets.txt ]; then
+            if [ -f ./slackbuilds.txt ]; then
               IFS=','
-              TARGETS="$(cat ./targets.txt)"
+              TARGETS=$(cat ./slackbuilds.txt)
             else
               TARGETS=''
-            fi
           fi
           echo -e "Targets:\n${TARGETS}"
           echo "::set-output name=targets::${TARGETS}"
