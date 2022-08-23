@@ -36,7 +36,7 @@ jobs:
           if [ "${GITHUB_EVENT}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
           else
-            GIT_DIFF="$(git diff --diff-filter=AM --name-only HEAD^ | grep -s -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$')"
+            GIT_DIFF="$(git diff --diff-filter=AM --name-only HEAD^ | grep -s -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || echo 'its ok')"
             TARGETS=$(echo ${GIT_DIFF} | tr ' ' ',')
           fi
           echo -e "Targets:\n${TARGETS}"
