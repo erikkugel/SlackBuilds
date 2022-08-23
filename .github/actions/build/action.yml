@@ -4,18 +4,26 @@ inputs:
   targets:
     required: true
     description: Targets to build
+  cr_username:
+    required: true
+    description: Container registry login username
+  cr_password:
+    required: true
+    description: Container registry login password
+
 runs:
   using: composite
   steps:
     - uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
 
     - run: |
         docker pull ghcr.io/erikkugel/slackbuild:0.0.1
         mkdir -v packages
+      shell: bash
 
     - uses: ./.github/actions/slackbuild
       with:

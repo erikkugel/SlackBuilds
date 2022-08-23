@@ -48,6 +48,8 @@ jobs:
         uses: ./.github/actions/build
         with:
           targets: ${{ steps.targets.outputs.targets }}
+          cr_username: ${{ github.actor }}
+          cr_password: ${{ secrets.GITHUB_TOKEN }}
 
 
 #      - id: ghcr_login
