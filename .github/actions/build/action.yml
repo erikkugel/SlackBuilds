@@ -17,8 +17,8 @@ runs:
     - uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ inputs.username }}
-        password: ${{ inputs.password }}
+        username: ${{ inputs.cr_username }}
+        password: ${{ inputs.cr_password }}
 
     - run: |
         docker pull ghcr.io/erikkugel/slackbuild:0.0.1
