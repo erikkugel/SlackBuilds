@@ -47,6 +47,7 @@ jobs:
               TARGETS=$(cat ./slackbuilds.txt)
             else
               TARGETS=''
+            fi
           fi
           echo -e "Targets:\n${TARGETS}"
           echo "::set-output name=targets::${TARGETS}"
