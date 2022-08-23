@@ -28,5 +28,5 @@ make install DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR}
 rm -r -f ./src
 /sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
-rm -v -r -f ${BUILD_DIR}
+rm -v -r -f "${BUILD_DIR}"
 
