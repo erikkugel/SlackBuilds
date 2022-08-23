@@ -37,13 +37,12 @@ jobs:
           if [ "${GITHUB_EVENT_NAME}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
           elif [ "${GITHUB_EVENT_NAME}" == 'push' ]; then
-            echo '' > ./targets.txt
             git diff --diff-filter=AM --name-only HEAD^ | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; } > ./diff.txt
             while read SLACKBUILD; do
               basename "$(dirname $SLACKBUILD)" >> ./targets.txt
             done < ./diff.txt
-            cat ./targets.txt
-            TARGETS=''
+            IFS=','
+            TARGETS="$(cat ./targets.txt)"
           fi
           echo -e "Targets:\n${TARGETS}"
           echo "::set-output name=targets::${TARGETS}"
