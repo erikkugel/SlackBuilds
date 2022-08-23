@@ -41,8 +41,12 @@ jobs:
             while read SLACKBUILD; do
               basename "$(dirname $SLACKBUILD)" >> ./targets.txt
             done < ./diff.txt
-            IFS=','
-            TARGETS="$(cat ./targets.txt)"
+            if [ -f ./targets.txt ]; then
+              IFS=','
+              TARGETS="$(cat ./targets.txt)"
+            else
+              TARGETS=''
+            fi
           fi
           echo -e "Targets:\n${TARGETS}"
           echo "::set-output name=targets::${TARGETS}"
