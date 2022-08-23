@@ -39,7 +39,7 @@ jobs:
             #GIT_DIFF="$(git diff --diff-filter=AM --name-only HEAD^ | grep -P '\.SlackBuild$|^slack-desc$|dependencies.txt')"
             #GIT_DIFF=''
             git diff --diff-filter=AM --name-only HEAD^ > ./diff.txt
-            GIT_DIFF=$(grep -E '\.SlackBuild|\/slack-desc$|\/dependencies.txt' ./diff.txt)
+            GIT_DIFF="$(grep -E '\.SlackBuild|\/slack-desc$|\/dependencies.txt' ./diff.txt)"
             TARGETS=$(echo "${GIT_DIFF}" | tr ' ' ',')
           fi
           echo -e "Targets:\n${TARGETS}"
