@@ -37,7 +37,7 @@ jobs:
             TARGETS=${{ inputs.target }}
           else
             GIT_DIFF="$(git diff --diff-filter=AM --name-only HEAD^)"
-            TARGETS=$(echo "${GIT_DIFF}" | tr ' ' ',')
+            TARGETS=$(echo ${GIT_DIFF} | grep -vo ${GITHUB_WORKSPACE} | tr ' ' ',')
           fi
           echo -e "Targets:\n${TARGETS}"
           echo "::set-output name=targets::${TARGETS}"
