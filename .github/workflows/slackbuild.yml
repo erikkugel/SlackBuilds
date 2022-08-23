@@ -33,6 +33,7 @@ jobs:
         shell: bash
         run: |
           set -x
+          echo ${GITHUB_EVENT}
           if [ "${GITHUB_EVENT}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
           elif [ "${GITHUB_EVENT}" == 'push' ]; then
