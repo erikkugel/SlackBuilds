@@ -33,10 +33,10 @@ jobs:
         shell: bash
         run: |
           set -x
-          echo ${GITHUB_EVENT}
-          if [ "${GITHUB_EVENT}" == 'workflow_dispatch' ]; then
+          echo ${GITHUB_EVENT_NAME}
+          if [ "${GITHUB_EVENT_NAME}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
-          elif [ "${GITHUB_EVENT}" == 'push' ]; then
+          elif [ "${GITHUB_EVENT_NAME}" == 'push' ]; then
             git diff --diff-filter=AM --name-only HEAD^ | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; } > ./diff.txt
             while read SLACKBUILD; do
               basename "$(dirname $SLACKBUILD)" >> ./slackbuilds.txt
