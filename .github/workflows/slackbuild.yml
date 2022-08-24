@@ -33,9 +33,10 @@ jobs:
         shell: bash
         run: |
           set -x
-          echo ${GITHUB_EVENT_NAME}
+          # If triggered by workflow dispatch, use targets from input
           if [ "${GITHUB_EVENT_NAME}" == 'workflow_dispatch' ]; then
             TARGETS=${{ inputs.target }}
+          # If triggered by push, pass all modified SlackBuilds and their dependecies as targets
           elif [ "${GITHUB_EVENT_NAME}" == 'push' ]; then
             git diff --diff-filter=AM --name-only HEAD^ | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; } > ./diff.txt
             while read SLACKBUILD; do
@@ -44,7 +45,7 @@ jobs:
             done < ./diff.txt
             if [ -f ./slackbuilds.txt ]; then
               IFS=','
-              TARGETS=$(cat ./slackbuilds.txt)
+              TARGETS=$(cat ./slackbuilds.txt | sort -u)
             else
               TARGETS=''
             fi
