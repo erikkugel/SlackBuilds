@@ -2,11 +2,10 @@
 
 echo -------DEBUG-------
 echo
-echo "UName: $(uname -a)"
-echo -e "Dirs:\n$(ls -d /SlackBuilds)\n$(ls -d /packages)"
-echo "TARGETS: ${TARGETS}"
-echo "ARGS: $@"
-echo -e "Is GitHub Action? ${GITHUB_ACTIONS}"
+echo "uname: $(uname -a)"
+echo "TARGETS env var: ${TARGETS}"
+echo "Arguments: $@"
+echo "Is GitHub Action? ${GITHUB_ACTIONS}"
 echo
 echo -----END DEBUG-----
 
