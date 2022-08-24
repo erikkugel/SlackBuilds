@@ -1,0 +1,35 @@
+name: Build
+description: Build slackpkg using Docker image
+inputs:
+  targets:
+    required: true
+    description: Targets to build
+  cr_username:
+    required: true
+    description: Container registry login username
+  cr_password:
+    required: true
+    description: Container registry login password
+
+runs:
+  using: composite
+  steps:
+    - uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ inputs.cr_username }}
+        password: ${{ inputs.cr_password }}
+
+    - run: |
+        docker pull ghcr.io/erikkugel/slackbuild:0.0.1
+        mkdir -v packages
+      shell: bash
+
+    - uses: ./.github/actions/slackbuild
+      with:
+        target: ${{ inputs.targets }}
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: packages
+        path: ./packages/*.txz

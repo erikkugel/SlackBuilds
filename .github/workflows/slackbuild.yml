@@ -1,9 +1,21 @@
+# Trigger
+
 on:
-  push:
+  pull_request:
     paths:
       - .github/workflows/slackbuild.yml
       - .github/actions/slackbuild/action.yml
+      - '**/*.SlackBuild'
+      - '**/slack-desc'
+      - '**/doinst.sh'
+    branches:
+      - master
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'One or more SlackBuilds to execute, comma-delimited'
+        required: true
+        type: string
 
 jobs:
   slackbuild:
@@ -14,30 +26,46 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          #fetch-depth: 2
 
-      - id: ghcr_login
-        name: GitHub Container Registry Login
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - id: docker_pull
-        name: Docker Pull
+      - id: targets
+        name: Targets
+        shell: bash
         run: |
-          docker pull ghcr.io/erikkugel/slackbuild:0.0.1
-          mkdir -v packages
-      
-      - id: slackbuild_alttab
-        name: SlackBuild alttab
-        uses: ./.github/actions/slackbuild
-        with:
-          target: "docker,uthash,alttab,lshw,xrestop,jq,keepassxc"
+          set -x
+          # If triggered by workflow dispatch, use targets from input
+          if [ "${GITHUB_EVENT_NAME}" == 'workflow_dispatch' ]; then
+            targets=(${{ inputs.target }})
+          # If triggered by a pull request, pass all modified SlackBuilds and their dependecies as targets
+          elif [ "${GITHUB_EVENT_NAME}" == 'pull_request' ]; then
+            git fetch && git checkout "${GITHUB_BASE_REF}" && git pull
+            git checkout "${GITHUB_HEAD_REF}"
+            declare -a diffs=($(git diff --diff-filter=AM --name-only "${GITHUB_BASE_REF}..${GITHUB_HEAD_REF}" \
+              | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
+            declare -a slackbuilds
+            echo "Diffs: (${diffs[@]})"
+            for diff in "${diffs[@]}"; do
+              echo "Diff: ${diff}"
+              slackbuild_dir="$(basename $(dirname ${diff}))"
+              echo "Dir: ${slackbuild_dir}"
+              if [[ -f "${slackbuild_dir}/dependecies.txt" ]]; then
+                while read -r dependency; do
+                  slackbuilds+=("${dependency}")
+                done < "${slackbuild_dir}/dependecies.txt"
+              fi
+              slackbuilds+=("${slackbuild_dir}")
+            done
+            IFS=','
+            targets="${slackbuilds[*]}"
+          fi
+          echo "::set-output name=targets::${targets}"
 
-      - id: upload_artifact
-        name: Upload Artifact
-        uses: actions/upload-artifact@v3
+      - id: build
+        name: Build
+        if: ${{ steps.targets.outputs.targets != '' }}
+        uses: ./.github/actions/build
         with:
-          name: packages
-          path: ./packages/*.txz
+          targets: ${{ steps.targets.outputs.targets }}
+          cr_username: ${{ github.actor }}
+          cr_password: ${{ secrets.GITHUB_TOKEN }}
+
