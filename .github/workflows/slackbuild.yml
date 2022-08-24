@@ -43,6 +43,7 @@ jobs:
             declare -a diffs=($(git diff --diff-filter=AM --name-only ${GITHUB_HEAD_REF}..${GITHUB_BASE_REF} \
               | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
             declare -a slackbuilds
+            echo "Diffs: (${diffs[@]})"
             for diff in "${diffs[@]}"; do
               echo "Diff: ${diff}"
               slackbuild_dir="$(basename $(dirname ${diff}))"
