@@ -41,17 +41,17 @@ jobs:
             git fetch && git checkout "${GITHUB_BASE_REF}" && git pull
             git checkout "${GITHUB_HEAD_REF}"
             declare -a diffs=($(git diff --diff-filter=AM --name-only "${GITHUB_BASE_REF}..${GITHUB_HEAD_REF}" \
-              | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
+              | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependencies.txt$' || true; }))
             declare -a slackbuilds
             echo "Diffs: (${diffs[@]})"
             for diff in "${diffs[@]}"; do
               echo "Diff: ${diff}"
               slackbuild_dir="$(basename $(dirname ${diff}))"
               echo "Dir: ${slackbuild_dir}"
-              if [[ -f "${slackbuild_dir}/dependecies.txt" ]]; then
+              if [[ -f "${slackbuild_dir}/dependencies.txt" ]]; then
                 while read -r dependency; do
                   slackbuilds+=("${dependency}")
-                done < "${slackbuild_dir}/dependecies.txt"
+                done < "${slackbuild_dir}/dependencies.txt"
               fi
               slackbuilds+=("${slackbuild_dir}")
             done
