@@ -38,7 +38,8 @@ jobs:
             targets=(${{ inputs.target }})
           # If triggered by a pull request, pass all modified SlackBuilds and their dependecies as targets
           elif [ "${GITHUB_EVENT_NAME}" == 'pull_request' ]; then
-            declare -a diffs=($(git diff --diff-filter=AM --name-only ${GITHUB_BASE_REF}...${GITHUB_HEAD_REF} | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
+            declare -a diffs=($(git diff --diff-filter=AM --name-only ${GITHUB_BASE_REF}..${GITHUB_HEAD_REF} \
+              | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
             declare -a slackbuilds
             for diff in "${diffs[@]}"; do
               echo "Diff: ${diff}"
@@ -46,7 +47,7 @@ jobs:
               echo "Dir: ${slackbuild_dir}"
               if [[ -f "${slackbuild_dir}/dependecies.txt" ]]; then
                 while read -r dependency; do
-                        slackbuilds+=("${dependency}")
+                  slackbuilds+=("${dependency}")
                 done < "${slackbuild_dir}/dependecies.txt"
               fi
               slackbuilds+=("${slackbuild_dir}")
