@@ -40,7 +40,7 @@ jobs:
           elif [ "${GITHUB_EVENT_NAME}" == 'pull_request' ]; then
             git fetch && git checkout "${GITHUB_BASE_REF}" && git pull
             git checkout "${GITHUB_HEAD_REF}"
-            declare -a diffs=($(git diff --diff-filter=AM --name-only ${GITHUB_BASE_REF}..${GITHUB_HEAD_REF} \
+            declare -a diffs=($(git diff --diff-filter=AM --name-only "${GITHUB_BASE_REF}..${GITHUB_HEAD_REF}" \
               | { grep -E '\.SlackBuild$|\/slack-desc$|\/dependecies.txt$' || true; }))
             declare -a slackbuilds
             echo "Diffs: (${diffs[@]})"
