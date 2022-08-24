@@ -37,7 +37,7 @@ Build the `alttab` package atop its `uthash` dependency:
 ```docker run -v /home/erikkugel/src/SlackBuilds:/SlackBuilds -v /tmp/packages:/packages slackbuild:0.0.1 "uthash,alttab"```
 
 ## About the `slackbuild` Docker Image
-The `slackbuild` image is built using a [vanilla latest stable Slackware64](https://github.com/users/erikkugel/packages/container/package/slackware64-15.0) image containing the _a_, _d_, _l_, _n_ and _x_ package categories as base. It's using this [Dockerfile](Package/Dockerfile) and hosted @ `ghcr.io/erikkugel/slackware64-15.0:0.0.1-a_d_l_n_x`
+The `slackbuild` image is built using [this Dockerfile](Package/Dockerfile) and a [vanilla latest stable Slackware64 image](https://github.com/users/erikkugel/packages/container/package/slackware64-15.0) containing the _a_, _d_, _l_, _n_ and _x_ package categories as base.
 
 # Questions, Comments & Feedback
 Questions, comments, feedback, inquiries about contributing, or any other constructive communications are welcome on GitHub or via email.
