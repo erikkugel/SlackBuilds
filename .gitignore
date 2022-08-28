@@ -10,6 +10,9 @@
 *.tgz
 *.txz
 
+# Ignore signatures
+*.sig
+
 # Ignore source control configurations of external repositories
 */.svn
 */.git

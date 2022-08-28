@@ -2,18 +2,18 @@
 #
 # Ernest Kugel, 2014
 
-PRGNAM="x264"
-VERSION="latest"
-#APP_URL=http://download.videolan.org/pub/videolan/${PRGNAM}/${VERSION}/${PRGNAM}-${VERSION}.tar.xz
-APP_URL=git://git.videolan.org/${PRGNAM}.git
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+PRGNAM='x264'
+VERSION='latest'
+APP_URL="https://code.videolan.org/videolan/${PRGNAM}.git"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1'
+CPU_COUNT="$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo || '1')"
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Clone/Pull latest
@@ -30,19 +30,19 @@ mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
+chown -Rc root:root ${BUILD_DIR}
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}
-chown -Rc root:root .
 ./configure \
 	--prefix=/usr/local \
 	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
 	--enable-shared
 
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
+make install -j${CPU_COUNT} DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
 rm -v -r -f ${BUILD_DIR}/src
 
-# Create package
+# Package
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
 rm -v -r -f ${BUILD_DIR}

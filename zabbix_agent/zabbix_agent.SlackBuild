@@ -3,37 +3,38 @@
 # Ernest Kugel, 2020
 
 PRGNAM='zabbix_agent'
-VERSION='4.0.20'
-APP_URL="https://cdn.zabbix.com/zabbix/sources/stable/4.0/zabbix-${VERSION}.tar.gz"
+VERSION='6.2'
+RELEASE="${VERSION}.1"
+APP_URL="https://cdn.zabbix.com/zabbix/sources/stable/${VERSION}/zabbix-${RELEASE}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1'
 
 set -e
 
 # Check for 64 bit system
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Get source
-if [ ! -f ./zabbix-${VERSION}.tar.gz ]; then
+if [ ! -f ./zabbix-${RELEASE}.tar.gz ]; then
 	wget ${APP_URL}
 fi
-if [ -d ./zabbix-${VERSION} ]; then
-        rm -rf ./zabbix-${VERSION}
+if [ -d ./zabbix-${RELEASE} ]; then
+        rm -rf ./zabbix-${RELEASE}
 fi
-tar -vxf ./zabbix-${VERSION}.tar.gz
+tar -vxf ./zabbix-${RELEASE}.tar.gz
 
 mkdir -vp ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc 
 cp -v ./slack-desc ${BUILD_DIR}/install/slack-desc
-cp -aRv ./zabbix-${VERSION} ${BUILD_DIR}/src
-cp -v ${BUILD_DIR}/src/zabbix-${VERSION}/conf/zabbix_agentd.conf ${BUILD_DIR}/etc
+cp -aRv ./zabbix-${RELEASE} ${BUILD_DIR}/src
+cp -v ${BUILD_DIR}/src/zabbix-${RELEASE}/conf/zabbix_agentd.conf ${BUILD_DIR}/etc
 chown -Rc root:root ${BUILD_DIR}
 
 # Build
-cd ${BUILD_DIR}/src/zabbix-${VERSION}
+cd ${BUILD_DIR}/src/zabbix-${RELEASE}
 ./configure --prefix=/usr \
         --libdir=/usr/lib${LIBDIRSUFFIX} \
         --sysconfdir=/etc \
@@ -43,5 +44,5 @@ cd ${BUILD_DIR}
 rm -vrf ${BUILD_DIR}/src
 
 # Create package
-/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+/sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${RELEASE}-$(uname -m)-${TAG}.txz
 rm -rf ${BUILD_DIR}
