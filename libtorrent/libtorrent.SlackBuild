@@ -1,43 +1,34 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2014
-
-PRGNAM="libtorrent"
-VERSION="1.0.5"
-APP_URL=http://downloads.sourceforge.net/project/libtorrent/libtorrent/libtorrent-rasterbar-1.0.5.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+# Ernest Kugel, 2022
 
 set -e
+PRGNAM='libtorrent'
+VERSION='2.0.7'
+APP_URL="https://github.com/arvidn/${PRGNAM}/releases/download/v${VERSION}/${PRGNAM}-rasterbar-${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
-else
-        LIBDIRSUFFIX=""
+# Download
+if ! [ -f "${PRGNAM}-rasterbar-${VERSION}.tar.gz" ]; then
+	wget -nc ${APP_URL} -O "${PRGNAM}-rasterbar-${VERSION}.tar.gz"
 fi
 
-# Clone/Pull latest
-if ! [ -f libtorrent-rasterbar-${PRGNAM}.tar.gz ]; then
-  wget -nc ${APP_URL}
-fi
-
+# Build
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-tar -v -x -C ${BUILD_DIR}/src -f libtorrent-rasterbar-${VERSION}.tar.gz
+tar -x -C ${BUILD_DIR}/src -f ${PRGNAM}-rasterbar-${VERSION}.tar.gz
 
-# Build
-cd ${BUILD_DIR}/src/${PRGNAM}-rasterbar-${VERSION}
-chown -Rc root:root .
-# Disable GUI (possible only at compile time: https://github.com/qbittorrent/qBittorrent/wiki/Running-qBittorrent-without-X-server)
-./configure \
-	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX}
+mkdir ${BUILD_DIR}/src/${PRGNAM}-rasterbar-${VERSION}/build
+cd ${BUILD_DIR}/src/${PRGNAM}-rasterbar-${VERSION}/build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 -Dstatic_runtime=ON -G Ninja ..
+ninja
+cmake --install .  --prefix ${BUILD_DIR}/usr
+rm -r -f ${BUILD_DIR}/src
 
-make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
-cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src
-
-# Create package
+# Package
+cd ${BUILD_DIR}
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+rm -r -f ${BUILD_DIR}
+
