@@ -1,25 +1,26 @@
 #!/bin/sh -e
 
 PRGNAM='shorewall-core'
-VERSION='5.2.3.3'
+VERSION='5.2.8'
 TAG='1_x'
-APP_URL='http://canada.shorewall.net/pub/shorewall/5.2/shorewall-5.2.3/shorewall-core-5.2.3.3.tgz'
+APP_URL="https://shorewall.cz/pub/shorewall/5.2/shorewall-${VERSION}/${PRGNAM}-${VERSION}.tar.bz2"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+set -e
 
 # Download
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
-if ! [ -f ${PRGNAM}-${VERSION}.tgz ]; then
-	wget ${APP_URL}
+if ! [ -f "${PRGNAM}-${VERSION}.tar.bz2" ]; then
+ 	wget -nc ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.bz2"
 fi
-tar -v -x -z -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tgz
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 
 # Build
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -x -j -C ${BUILD_DIR}/src -f ${PRGNAM}-${VERSION}.tar.bz2
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 DESTDIR=${BUILD_DIR} ./install.sh ./shorewallrc.slackware
 cd ${BUILD_DIR}
-rm -v -r -f ${BUILD_DIR}/src
+rm -r -f ${BUILD_DIR}/src
 
-# Create package
+# Package
 /sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+rm -r -f ${BUILD_DIR}
