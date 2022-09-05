@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+PRGNAM='qbittorrent'
+VERSION='4.4.5'
+APP_URL="https://sourceforge.net/projects/qbittorrent/files/${PRGNAM}/${PRGNAM}-${VERSION}/${PRGNAM}-${VERSION}.tar.xz/download"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+set -e
+
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
+else
+        LIBDIRSUFFIX=''
+fi
+
+# Download
+if ! [ -f ${PRGNAM}-${VERSION}.tar.xz ]; then
+	wget -nc ${APP_URL} -O ${PRGNAM}-${VERSION}.tar.xz
+fi
+
+# Build
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -v -f ./rc.qbittorrent ${BUILD_DIR}/etc/rc.d/rc.qbittorrent
+tar -x -J -C ${BUILD_DIR}/src -f ./${PRGNAM}-${VERSION}.tar.xz
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+chown -Rc root:root .
+
+# Skip GUI: https://github.com/qbittorrent/qBittorrent/wiki/Running-qBittorrent-without-X-server
+#export DESTDIR=${BUILD_DIR}
+#./configure \
+#	--prefix=/usr \
+#	--libdir=/usr/lib${LIBDIRSUFFIX} \
+#        --disable-gui
+
+
+cmake -B build -G 'Ninja' -DCMAKE_BUILD_TYPE=Release -DWEBUI=OFF -DCMAKE_INSTALL_PREFIX=${BUILD_DIR}
+cmake --build build --parallel $(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
+cmake --install
+
+cd ${BUILD_DIR} 
+rm -r -f ${BUILD_DIR}/src
+
+# Package
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -r -f ${BUILD_DIR}
+

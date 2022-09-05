@@ -1,0 +1,61 @@
+#!/bin/sh
+# Start/stop/restart vlc.
+source /etc/rc.d/rc.vlc.conf
+
+# Start vlc:
+vlc_start() {
+  CMDLINE="/usr/local/bin/cvlc --daemon 
+    -I http 
+    --http-host ${VLC_HOST} 
+    --http-port ${VLC_PORT} 
+    --http-password=${VLC_PASSWORD}"
+  echo "Starting VLC daemon, listening at ${VLC_HOST}:${VLC_PORT}"
+  sudo -s -u ${VLC_USER} $CMDLINE --pidfile /var/run/vlc/vlc.pid
+  echo
+}
+
+# Stop vlc:
+vlc_stop() {
+  echo -n "Stopping VLC daemon..."
+  if [ -r /var/run/vlc/vlc.pid ]; then
+    kill -HUP $(cat /var/run/vlc/vlc.pid)
+    rm -f /var/run/vlc/vlc.pid
+  else
+    killall -HUP -q vlc
+  fi
+  echo
+}
+
+# Restart vlc:
+vlc_restart() {
+  vlc_stop
+  sleep 1
+  vlc_start
+}
+
+# Check if vlc is running
+vlc_status() {
+  if [ -e /var/run/vlc/vlc.pid ]; then
+    echo "vlc is running."
+  else 
+    echo "vlc is stopped."
+    exit 1
+  fi
+}
+
+case "$1" in
+'start')
+  vlc_start
+  ;;
+'stop')
+  vlc_stop
+  ;;
+'restart')
+  vlc_restart
+  ;;
+'status')
+  vlc_status
+  ;;
+*)
+  echo "usage $0 start|stop|restart|status"
+esac

@@ -1,0 +1,4 @@
+x264
+a52dec
+lua
+ffmpeg
