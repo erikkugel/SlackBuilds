@@ -3,4 +3,4 @@
 else
         LIBDIRSUFFIX=""
 fi
-/sbin/ldconfig -v -n /usr/local/lib${LIBDIRSUFFIX} )
+/sbin/ldconfig -v -n /usr/lib${LIBDIRSUFFIX} )

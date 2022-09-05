@@ -1,15 +1,13 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2017
+# Ernest Kugel, 2022
 
 PRGNAM='nut'
-VERSION='2.7.4'
-APP_URL="http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz"
+VERSION='2.8.0'
+APP_URL="https://github.com/networkupstools/${PRGNAM}/releases/download/v${VERSION}/${PRGNAM}-${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
-
 set -e
-
 if [ "$(getconf LONG_BIT)" == '64' ]; then
         LIBDIRSUFFIX='64'        
         export CFLAGS='-fPIC'
@@ -20,15 +18,10 @@ fi
 
 # Download
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/build ${BUILD_DIR}/src ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/usr/bin
-
 if ! [ -f ./${PRGNAM}-${VERSION}.tar.gz ]; then
 	wget ${APP_URL} -O ${PRGNAM}-${VERSION}.tar.gz
 fi
-gpg --batch --fetch-keys http://www.networkupstools.org/source/nut-key.gpg
-wget -nc http://www.networkupstools.org/source/2.7/${PRGNAM}-${VERSION}.tar.gz.sig
-gpg --batch --verify ${PRGNAM}-${VERSION}.tar.gz.sig ${PRGNAM}-${VERSION}.tar.gz || exit 99
-
-tar -v -x -z -C ${BUILD_DIR}/src -f ./nut-${VERSION}.tar.gz
+tar -x -z -C ${BUILD_DIR}/src -f ./nut-${VERSION}.tar.gz
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 cp -v -f ./rc.ups ${BUILD_DIR}/etc/rc.d/rc.ups
@@ -48,8 +41,9 @@ make check
 make install DESTDIR=${BUILD_DIR}
 make installcheck
 cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src ${BUILD_DIR}/build
+rm -r -f ${BUILD_DIR}/src ${BUILD_DIR}/build
 
-# Create package
+# Package
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+rm -r -f ${BUILD_DIR}
+

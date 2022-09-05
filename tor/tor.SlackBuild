@@ -3,7 +3,7 @@
 # Ernest Kugel, 2015
 
 PRGNAM="tor"
-VERSION="0.3.1.9"
+VERSION="0.4.7.10"
 APP_URL=https://www.torproject.org/dist/tor-${VERSION}.tar.gz
 BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
 TAG=1_x

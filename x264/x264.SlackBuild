@@ -1,15 +1,14 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2014
+# Ernest Kugel, 2022
 
 PRGNAM='x264'
 VERSION='latest'
 APP_URL="https://code.videolan.org/videolan/${PRGNAM}.git"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
-TAG='1'
+TAG="1_x_$(date +%Y%m%d)"
 CPU_COUNT="$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo || '1')"
 set -e
-
 if [ "$(getconf LONG_BIT)" == '64' ]; then
         LIBDIRSUFFIX='64'
 else
@@ -22,27 +21,26 @@ if [ -d ./${PRGNAM}/.git ]; then
         git pull
         cd ..
 else
-        rm -rfv ./${PRGNAM}
+        rm -rf ./${PRGNAM}
         git clone ${APP_URL} ${PRGNAM}
 fi
 
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
-chown -Rc root:root ${BUILD_DIR}
-
 # Build
+mkdir -vp ${BUILD_DIR}/install ${BUILD_DIR}/src
+cp -vf ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -vf ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+cp -aRpf ${PRGNAM} ${BUILD_DIR}/src
+chown -R root:root ${BUILD_DIR}
 cd ${BUILD_DIR}/src/${PRGNAM}
 ./configure \
-	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX} \
 	--enable-shared
-
 make install -j${CPU_COUNT} DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src
+rm -rf ${BUILD_DIR}/src
 
 # Package
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+rm -rf ${BUILD_DIR}
+

@@ -1,51 +1,45 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2014
+# Ernest Kugel, 2022
 
-PRGNAM="ffmpeg"
-VERSION="latest"
-APP_URL=git://source.ffmpeg.org/ffmpeg.git
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
-
+PRGNAM='ffmpeg'
+VERSION='snapshot'
+APP_URL="https://ffmpeg.org/releases/${PRGNAM}-${VERSION}.tar.bz2"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG="1_x_$(date +%Y%m%d)"
 set -e
-
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
+	export CFLAGS='-fPIC'
+        export CPPFLAGS='-fPIC'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Download
-if [ -d ./${PRGNAM}/.git ]; then
-	cd ./${PRGNAM}
-	git pull
-	cd ..
-else
-	rm -rf ./${PRGNAM}
-	git clone ${APP_URL} ${PRGNAM}
-fi
+wget ${APP_URL} -O ffmpeg-snapshot.tar.bz2
 
 # Prepare
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
 cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
-cp -aRpfv ${PRGNAM} ${BUILD_DIR}/src
+cp -aRpf ${PRGNAM} ${BUILD_DIR}/src
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}
-chown -Rc root:root .
+chown -R root:root .
 ./configure \
-	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX} \
-	--shlibdir=/usr/local/lib${LIBDIRSUFFIX} \
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX} \
+	--shlibdir=/usr/lib${LIBDIRSUFFIX} \
 	--enable-shared
 
 make install -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo) DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src
+rm -r -f ${BUILD_DIR}/src
 
-# Create package
+# Package
+find ${BUILD_DIR}/usr/share/man -type f -exec bzip2 -9 {} \;
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+rm -r -f ${BUILD_DIR}
 

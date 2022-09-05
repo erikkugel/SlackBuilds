@@ -2,44 +2,42 @@
 #
 # Ernest Kugel, 2014
 
-PRGNAM="xvidcore"
-VERSION="latest"
-APP_URL=http://svn.xvid.org/trunk
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+PRGNAM='xvidcore'
+VERSION='latest'
+APP_URL='http://svn.xvid.org/trunk'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG="1_x_$(date +%Y%m%d)"
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-        LIBDIRSUFFIX="64"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        LIBDIRSUFFIX='64'
 else
-        LIBDIRSUFFIX=""
+        LIBDIRSUFFIX=''
 fi
 
 # Download latest daily build and fetch description and post-install script
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+mkdir -vp ${BUILD_DIR}/install ${BUILD_DIR}/src
+cp -vf ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -vf ./doinst.sh ${BUILD_DIR}/install/doinst.sh
 if [ -d ./.svn ]; then
 	svn update --username anonymous --password '' --non-interactive .
 else
 	svn checkout ${APP_URL} --username anonymous --password '' --non-interactive .
 fi
-cp -v -a -R -p -f ${PRGNAM} ${BUILD_DIR}/src/${PRGNAM}
+cp -aRpf ${PRGNAM} ${BUILD_DIR}/src/${PRGNAM}
 
 # Build
 cd ${BUILD_DIR}/src/${PRGNAM}/build/generic
 ./bootstrap.sh
 ./configure \
-	--prefix=/usr/local \
-	--libdir=/usr/local/lib${LIBDIRSUFFIX}
+	--prefix=/usr \
+	--libdir=/usr/lib${LIBDIRSUFFIX}
 
 make -j$(grep -Pc 'processor\t:[0-9]*' /proc/cpuinfo)
 make install DESTDIR=${BUILD_DIR}
 cd ${BUILD_DIR} 
-rm -v -r -f ${BUILD_DIR}/src
+rm -rf ${BUILD_DIR}/src
 
-# Create package
+# Package
 /sbin/makepkg -l y -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-
-# Clean up
-rm -v -r -f ${BUILD_DIR}
+rm -rf ${BUILD_DIR}
