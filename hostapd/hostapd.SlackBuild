@@ -1,21 +1,21 @@
 #!/bin/bash
 #
-# Ernest Kugel, July 2015
+# Ernest Kugel, 2022
 
-PRGNAM="hostapd"
-VERSION="2.6"
-APP_URL=https://w1.fi/releases/${PRGNAM}-${VERSION}.tar.gz
-BUILD_DIR=/tmp/SlackBuild-${PRGNAM}-$(date +%s)
-TAG=1
+PRGNAM='hostapd'
+VERSION='2.9'
+APP_URL="https://w1.fi/releases/${PRGNAM}-${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
 
 set -e
 
-if [ "$(getconf LONG_BIT)" == "64" ]; then
-	LIBDIRSUFFIX="64"
-	export CFLAGS="-fPIC"
-	export CPPFLAGS="-fPIC"
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+	LIBDIRSUFFIX='64'
+	export CFLAGS='-fPIC'
+	export CPPFLAGS='-fPIC'
 else
-	LIBDIRSUFFIX=""
+	LIBDIRSUFFIX=''
 fi
 
 # Download
