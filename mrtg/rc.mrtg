@@ -15,7 +15,7 @@ mrtg_start() {
 # Stop mrtg:
 mrtg_stop() {
         echo -n 'Stopping MRTG daemon...'
-        pkill --full '/usr/bin/perl -w /usr/bin/mrtg'
+        pkill --full "/usr/bin/perl -w ${CMDLINE}"
         echo
 }
 
