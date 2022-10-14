@@ -1,0 +1,42 @@
+#!/bin/sh
+# Start/stop/restart mrtg.
+CMDLINE='/usr/bin/mrtg'
+
+# Start mrtg:
+mrtg_start() {
+        echo 'Starting MRTG daemon...'
+        env LANG=C ${CMDLINE} --user=mrtg /etc/mrtg.cfg \
+                --logging /var/log/mrtg.log \
+                --lock-file /var/lock/mrtg.cfg_l \
+                --pid-file /var/run/mrtg/mrtg.pid
+        echo
+}
+
+# Stop mrtg:
+mrtg_stop() {
+        echo -n 'Stopping MRTG daemon...'
+        pkill --full '/usr/bin/perl -w /usr/bin/mrtg'
+        echo
+}
+
+# Restart mrtg:
+mrtg_restart() {
+        mrtg_stop
+        sleep 1
+        mrtg_start
+}
+
+case "$1" in
+'start')
+        mrtg_start
+        ;;
+'stop')
+        mrtg_stop
+        ;;
+'restart')
+        mrtg_restart
+        ;;
+*)
+        echo "usage $0 start|stop|restart"
+        ;;
+esac
