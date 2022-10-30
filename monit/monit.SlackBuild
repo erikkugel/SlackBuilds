@@ -26,7 +26,7 @@ tar -x -C ${BUILD_DIR}/src -f ${PRGNAM}-${VERSION}.tar.gz
 cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
 cp -v ./monitrc ${BUILD_DIR}/etc/monitrc.new
 ./bootstrap
-./configure --prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX}
+./configure --prefix=/usr
 make install DESTDIR=${BUILD_DIR}
 rm -r -f ${BUILD_DIR}/src
 
