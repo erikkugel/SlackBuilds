@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+
+PRGNAM='vscode'
+APP_URL='https://code.visualstudio.com/sha/download?build=stable&os=linux-x64'
+VERSION="$(wget -S --spider ${APP_URL} 2>&1 \
+ | grep -o -m 1 'code-stable-x64-[0-9]*.tar.gz' \
+ | grep -o -P '[0-9]{10,}')"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+mkdir -v "${BUILD_DIR}" "${BUILD_DIR}/install" "${BUILD_DIR}/opt"
+cp -v ./slack-desc "${BUILD_DIR}/install/slack-desc"
+cp -v ./doinst.sh "${BUILD_DIR}/install/doinst.sh"
+
+# Download
+wget --trust-server-names "${APP_URL}" -O - | tar -v -x -z -f - -C "${BUILD_DIR}/opt"
+
+# Package
+cd "${BUILD_DIR}"
+chown -R root:root ./
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION:='latest'}-x86_64-${TAG}.txz"
+rm -r -f "${BUILD_DIR}"
+
