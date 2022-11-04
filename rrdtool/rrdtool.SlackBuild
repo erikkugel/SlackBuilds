@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+PRGNAM='rrdtool'
+VERSION='1.8.0'
+APP_URL="https://github.com/oetiker/rrdtool-1.x/archive/refs/tags/v${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+	export CFLAGS='-fPIC'
+	export CPPFLAGS='-fPIC'
+	LIBDIRSUFFIX='64'
+else
+	LIBDIRSUFFIX='64'
+fi
+
+# Download
+if ! [ -f "${PRGNAM}-${VERSION}.tar.gz" ]; then
+ 	wget -nc "${APP_URL}" -O "${PRGNAM}-${VERSION}.tar.gz"
+fi
+
+# Build
+mkdir -v "${BUILD_DIR}" "${BUILD_DIR}/install" "${BUILD_DIR}/src"
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -x -C "${BUILD_DIR}/src" -f "${PRGNAM}-${VERSION}.tar.gz"
+cd "${BUILD_DIR}/src/${PRGNAM}-1.x-${VERSION}"
+./configure --prefix=/usr --libdir="/usr/lib${LIBDIRSUFFIX}"
+make install DESTDIR="${BUILD_DIR}"
+
+# Package
+cd "${BUILD_DIR}"
+rm -r -f ./src
+find ./usr/share/man -type f -exec bzip2 -9 {} \;
+/sbin/makepkg -l y -p -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
+rm -r -f "${BUILD_DIR}"
+
