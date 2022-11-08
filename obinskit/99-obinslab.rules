@@ -1,0 +1,1 @@
+ACTION=="add", KERNEL=="hidraw*", ATTRS{idVendor}=="04d9", ATTRS{idProduct}=="a293", GROUP="input", MODE="0666"

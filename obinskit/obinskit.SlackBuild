@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2022
+
+set -e
+
+PRGNAM='obinskit'
+VERSION='1.2.11'
+APP_URL="https://s3.hexcore.xyz/occ/linux/tar/ObinsKit_${VERSION}_x64.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+mkdir -v -p "${BUILD_DIR}" "${BUILD_DIR}/install" "${BUILD_DIR}/opt" "${BUILD_DIR}/etc/udev/rules.d"
+cp -v ./slack-desc "${BUILD_DIR}/install/slack-desc"
+cp -v ./doinst.sh "${BUILD_DIR}/install/doinst.sh"
+cp -v ./99-obinslab.rules "${BUILD_DIR}/etc/udev/rules.d/99-obinslab.rules"
+
+# Download
+if [ ! -f "./ObinsKit_${VERSION}_x64.tar.gz" ]; then
+	wget "${APP_URL}"
+fi
+
+# Package
+tar -x -z -f "./ObinsKit_${VERSION}_x64.tar.gz" -C "${BUILD_DIR}/opt"
+cd "${BUILD_DIR}"
+mv -v "./opt/ObinsKit_${VERSION}_x64" ./opt/obinskit
+chown -R root:root ./
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz"
+rm -r -f "${BUILD_DIR}"
+
