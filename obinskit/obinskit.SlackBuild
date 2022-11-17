@@ -25,6 +25,7 @@ tar -x -z -f "./ObinsKit_${VERSION}_x64.tar.gz" -C "${BUILD_DIR}/opt"
 cd "${BUILD_DIR}"
 mv -v "./opt/ObinsKit_${VERSION}_x64" ./opt/obinskit
 chown -R root:root ./
+chmod -R -c 755 ./opt/obinskit
 /sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz"
 rm -r -f "${BUILD_DIR}"
 
