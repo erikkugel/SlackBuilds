@@ -18,7 +18,7 @@ fi
 
 # Download
 if ! [ -f "${PRGNAM}.tar.gz" ]; then
- 	wget -nc ${APP_URL} -O "${PRGNAM}.tar.gz"
+ 	wget ${APP_URL} -O "${PRGNAM}.tar.gz"
 fi
 
 # Build
@@ -37,5 +37,5 @@ rm -r -f ${BUILD_DIR}/src
 
 # Package
 cd ${BUILD_DIR}
-/sbin/makepkg -l n -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-rm -r -f ${BUILD_DIR}
+/sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+#rm -r -f ${BUILD_DIR}
