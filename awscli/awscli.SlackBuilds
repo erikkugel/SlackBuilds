@@ -38,4 +38,4 @@ rm -r -f ${BUILD_DIR}/src
 # Package
 cd ${BUILD_DIR}
 /sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
-#rm -r -f ${BUILD_DIR}
+rm -r -f ${BUILD_DIR}
