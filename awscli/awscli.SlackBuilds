@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2023
+
+set -e
+PRGNAM='awscli'
+APP_URL='https://awscli.amazonaws.com/awscli.tar.gz'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+export PYTHON='/usr/bin/python3'
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+	export CFLAGS='-fPIC'
+	export CPPFLAGS='-fPIC'
+	LIBSUFFIX='64'
+else
+	LIBSUFFIX=''
+fi
+
+# Download
+if ! [ -f "${PRGNAM}.tar.gz" ]; then
+ 	wget -nc ${APP_URL} -O "${PRGNAM}.tar.gz"
+fi
+
+# Build
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/src
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+tar -x -C ${BUILD_DIR}/src -f ${PRGNAM}.tar.gz
+VERSION="$(basename ${BUILD_DIR}/src/${PRGNAM}-* | cut -d '-' -f 2)"
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+./configure --prefix=/usr --libdir="/usr/lib${LIBSUFFIX}" \
+ --with-download-deps \
+ --with-install-type=portable-exe
+make
+make DESTDIR=${BUILD_DIR} install
+rm -r -f ${BUILD_DIR}/src
+
+# Package
+cd ${BUILD_DIR}
+/sbin/makepkg -l n -p -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -r -f ${BUILD_DIR}
