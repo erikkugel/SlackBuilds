@@ -21,7 +21,7 @@ runs:
         password: ${{ inputs.cr_password }}
 
     - run: |
-        docker pull ghcr.io/erikkugel/slackbuild:0.0.1
+        docker pull ghcr.io/erikkugel/slackbuild:latest
         mkdir -v packages
       shell: bash
 
