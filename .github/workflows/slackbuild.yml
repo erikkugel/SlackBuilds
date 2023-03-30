@@ -58,7 +58,8 @@ jobs:
             IFS=','
             targets="${slackbuilds[*]}"
           fi
-          echo "::set-output name=targets::${targets}"
+          #echo "::set-output name=targets::${targets}"
+          echo "targets=${targets}" >> ${GITHUB_OUTPUT}
 
       - id: build
         name: Build
