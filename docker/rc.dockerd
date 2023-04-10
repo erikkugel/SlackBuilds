@@ -1,0 +1,41 @@
+#!/bin/sh
+# Start/stop/restart docker.
+CMDLINE='/usr/bin/dockerd'
+PIDFILE='/var/run/dockerd.pid'
+LOGFILE='/var/log/dockerd.log'
+
+# Start docker:
+docker_start() {
+        echo 'Starting Docker daemon...'
+	${CMDLINE} --group docker --pidfile ${PIDFILE} &> ${LOGFILE} &
+        echo
+}
+
+# Stop docker:
+docker_stop() {
+        echo -n 'Stopping Docker daemon...'
+        kill `cat ${PIDFILE}`
+        echo
+}
+
+# Restart docker:
+docker_restart() {
+        docker_stop
+        sleep 1
+        docker_start
+}
+
+case "$1" in
+'start')
+        docker_start
+        ;;
+'stop')
+        docker_stop
+        ;;
+'restart')
+        docker_restart
+        ;;
+*)
+        echo "usage $0 start|stop|restart"
+        ;;
+esac

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2022
+# Ernest Kugel, 2023
 
 set -e
 
@@ -14,14 +14,16 @@ TAG='1_x'
 if [ ! -f "docker-${VERSION}.tgz" ]; then
 	wget -nc ${APP_URL}
 fi
-mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/usr/bin
-cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-tar -vxf "docker-${VERSION}.tgz" -C ${BUILD_DIR}
-cp ${BUILD_DIR}/docker/* ${BUILD_DIR}/usr/bin
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/usr/bin
+cp -v ./slack-desc ${BUILD_DIR}/install/
+cp -v ./doinst.sh ${BUILD_DIR}/install/
+cp -v ./rc.dockerd ${BUILD_DIR}/etc/rc.d/
+tar -xf "docker-${VERSION}.tgz" -C ${BUILD_DIR}
+cp -v ${BUILD_DIR}/docker/* ${BUILD_DIR}/usr/bin/
 
 # Package
 cd ${BUILD_DIR}
 rm -r -f ./docker
-/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz
-rm -v -r -f ${BUILD_DIR}
+/sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz
+rm -r -f ${BUILD_DIR}
 
