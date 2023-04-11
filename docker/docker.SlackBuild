@@ -5,7 +5,7 @@
 set -e
 
 PRGNAM='docker'
-VERSION='20.10.17'
+VERSION='23.0.3'
 APP_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
@@ -17,7 +17,7 @@ fi
 mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/etc/rc.d ${BUILD_DIR}/usr/bin
 cp -v ./slack-desc ${BUILD_DIR}/install/
 cp -v ./doinst.sh ${BUILD_DIR}/install/
-cp -v ./rc.dockerd ${BUILD_DIR}/etc/rc.d/
+cp -v ./rc.docker ${BUILD_DIR}/etc/rc.d/
 tar -xf "docker-${VERSION}.tgz" -C ${BUILD_DIR}
 cp -v ${BUILD_DIR}/docker/* ${BUILD_DIR}/usr/bin/
 
