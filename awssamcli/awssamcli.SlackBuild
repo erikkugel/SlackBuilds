@@ -1,0 +1,30 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2023
+
+set -e
+PRGNAM='awssamcli'
+VERSION='latest'
+APP_URL='https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+export PYTHON='/usr/bin/python3'
+
+# Download
+if ! [ -f 'aws-sam-cli-linux-x86_64.zip' ]; then
+ 	wget ${APP_URL}
+fi
+
+# Build
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/sam-installation
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+cp -v -f ./doinst.sh ${BUILD_DIR}/install/doinst.sh
+unzip aws-sam-cli-linux-x86_64.zip -d ${BUILD_DIR}/sam-installation
+
+${BUILD_DIR}/sam-installation/install --install-dir ${BUILD_DIR}/usr/share/aws-sam-cli --bin-dir ${BUILD_DIR}/usr/bin
+rm -r -f ${BUILD_DIR}/sam-installation
+
+# Package
+cd ${BUILD_DIR}
+/sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -r -f ${BUILD_DIR}

@@ -1,0 +1,11 @@
+awssamcli: awssamcli
+awssamcli: 
+awssamcli: AWS SAM CLI is a command line tool that you can use with AWS SAM
+awssamcli: templates and supported third-party integrations to build and run
+awssamcli: your serverless applications.
+awssamcli: 
+awssamcli: 
+awssamcli: 
+awssamcli: 
+awssamcli: (https://docs.aws.amazon.com/serverless-application-model/index.html)
+awssamcli: 
