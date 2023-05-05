@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2023
+
+set -e
+
+PRGNAM='openttd'
+VERSION='13.1'
+APP_URL="https://cdn.openttd.org/openttd-releases/${VERSION}/openttd-${VERSION}-linux-generic-amd64.tar.xz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "openttd-${VERSION}-linux-generic-amd64.tar.xz" ]; then
+	wget -nc ${APP_URL}
+fi
+mkdir -v -p ${BUILD_DIR}/install ${BUILD_DIR}/opt
+cp -v ./slack-desc ${BUILD_DIR}/install/
+cp -v ./doinst.sh ${BUILD_DIR}/install/
+tar -xf "openttd-${VERSION}-linux-generic-amd64.tar.xz" -C ${BUILD_DIR}/opt
+mv ${BUILD_DIR}/opt/openttd-${VERSION}-linux-generic-amd64 ${BUILD_DIR}/opt/openttd
+
+# Package
+cd ${BUILD_DIR}
+/sbin/makepkg -l n -c n /tmp/${PRGNAM}-${VERSION}-x86_64-${TAG}.txz
+rm -r -f ${BUILD_DIR}
+
