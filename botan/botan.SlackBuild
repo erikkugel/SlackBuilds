@@ -4,10 +4,9 @@
 
 set -e
 
-PRGNAM='keepassxc'
-VERSION='2.7.6'
-ASCIIDOCTOR_VERSION='2.0.20'
-APP_URL="https://github.com/keepassxreboot/keepassxc/releases/download/${VERSION}/keepassxc-${VERSION}-src.tar.xz"
+PRGNAM='botan'
+VERSION='3.1.1'
+APP_URL="https://github.com/randombit/botan/archive/refs/tags/${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
 if [ "$(getconf LONG_BIT)" == '64' ]; then
@@ -21,26 +20,20 @@ else
 fi
 
 # Download
-if [ ! -f "keepassxc-${VERSION}-src.tar.xz" ]; then
-	wget -q ${APP_URL}
-fi
-if [ ! -f "v${ASCIIDOCTOR_VERSION}.tar.gz" ]; then
-	wget -q	https://github.com/asciidoctor/asciidoctor/archive/v${ASCIIDOCTOR_VERSION}.tar.gz
+if [ ! -f "botan-${VERSION}.tar.gz" ]; then
+	wget -q ${APP_URL} -O "botan-${VERSION}.tar.gz"
 fi
 mkdir -v -p \
 	${BUILD_DIR}/install \
 	${BUILD_DIR}/src
 
 cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
-tar -v -x -f ./keepassxc-${VERSION}-src.tar.xz -C ${BUILD_DIR}/src
-tar -v -x -f ./v${ASCIIDOCTOR_VERSION}.tar.gz -C ${BUILD_DIR}/src
-export PATH=${PATH}:${BUILD_DIR}/src/asciidoctor-${ASCIIDOCTOR_VERSION}/bin
+tar -v -x -f ./botan-${VERSION}.tar.gz -C ${BUILD_DIR}/src
 
 # Build
-cd ${BUILD_DIR}/src/keepassxc-${VERSION}
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+cd ${BUILD_DIR}/src/botan-${VERSION}
+python3 ./configure.py --prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX}
+make
 make install DESTDIR=${BUILD_DIR} 
 
 # Package
