@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2021
+# Ernest Kugel, 2023
 
 set -e
 
@@ -9,14 +9,8 @@ VERSION='2.40.1'
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
 if [ "$(getconf LONG_BIT)" == '64' ]; then
-        LIBDIRSUFFIX='64'
-        export CFLAGS="${CFLAGS} -O2 -fPIC"
-        export CPPFLAGS="${CPPFLAGS} -O2 -fPIC"
 	ARCH='amd64'
 else
-        LIBDIRSUFFIX=''
-        export CFLAGS="${CFLAGS} -O2 -mtune=native"
-        export CXXFLAGS="${CPPFLAGS} -O2 -mtune=native"
 	ARCH='386'
 fi
 APP_URL="https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_linux_${ARCH}.tar.gz"
