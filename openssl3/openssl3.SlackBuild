@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2022
+# Ernest Kugel, 2024
 
 set -e
 PRGNAM='openssl'
@@ -30,7 +30,7 @@ tar -x -C "${BUILD_DIR}/src" -f "${PRGNAM}-${VERSION}.tar.gz"
 cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
 ./Configure \
         --prefix="/opt/${PRGNAM}${PRGNAMSUFFIX}" \
-        --openssldir="/opt/${PRGNAM}${PRGNAMSUFFIX}/ssl" \
+        --openssldir="/opt/ssl" \
         --libdir="/opt/${PRGNAM}${PRGNAMSUFFIX}/lib${LIBDIRSUFFIX}" \
         no-shared
 make install DESTDIR=${BUILD_DIR}
@@ -41,3 +41,4 @@ cd ${BUILD_DIR}
 find "./opt/${PRGNAM}${PRGNAMSUFFIX}/share/man" -type f -exec bzip2 -9 {} \;
 /sbin/makepkg -l y -p -c n "/tmp/${PRGNAM}${PRGNAMSUFFIX}-${VERSION}-$(uname -m)-${TAG}.txz"
 rm -r -f ${BUILD_DIR}
+
