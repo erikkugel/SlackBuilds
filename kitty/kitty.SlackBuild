@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# https://sw.kovidgoyal.net/kitty/build/
+#
+# Ernest Kugel, 2024
+
+set -e
+PRGNAM='kitty'
+VERSION='0.35.2'
+APP_URL="https://github.com/kovidgoyal/kitty/archive/refs/tags/v${VERSION}.tar.gz"
+SIMDE_URL="https://github.com/simd-everywhere/simde/archive/refs/tags/v0.8.2.tar.gz"
+GO_URL="https://go.dev/dl/go1.22.5.linux-amd64.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+TARGETS=( 'kitty-terminfo' 'kitty-shell-integration' 'kitty' )
+
+# Download
+if ! [ -f "${PRGNAM}-${VERSION}.tar.gz" ]; then
+	wget -nc ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.gz"
+fi
+if ! [ -f "simde-0.8.2.tar.gz" ]; then
+	wget -nc ${SIMDE_URL} -O "simde-0.8.2.tar.gz"
+fi
+if ! [ -f "go1.22.5.linux-amd64.tar.gz" ]; then
+	wget -nc ${GO_URL} -O "go1.22.5.linux-amd64.tar.gz"
+fi
+
+# Build
+mkdir -p ${BUILD_DIR}/src ${BUILD_DIR}/include ${BUILD_DIR}/go
+tar -x -C ${BUILD_DIR}/src -f ${PRGNAM}-${VERSION}.tar.gz
+# Slackware doesn not ship with simd-everywhere, so we provide our own headers:
+tar -x -C ${BUILD_DIR}/include -f "simde-0.8.2.tar.gz" "simde-0.8.2/simde" --strip-components=1
+
+# Slackware stable and current do not have a sufficiently recent version of Golang, so we have to provide our own environment for build:
+#tar -x -C ${BUILD_DIR} -f go1.22.5.linux-amd64.tar.gz
+#export GOROOT=${BUILD_DIR}/go
+#go install golang.org/dl/go1.22.5@latest
+#export PATH=${PATH}:${BUILD_DIR}/go/bin
+
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+CFLAGS="-I${BUILD_DIR}/include" make linux-package
+
+# Package
+for target in "${TARGETS[@]}"; do
+	mkdir -v -p ${BUILD_DIR}/staging/${target}/install
+       	cp -v -f ./slack-desc_${target} ${BUILD_DIR}/staging/${target}/install/slack-desc
+done
+
+mkdir -p ${BUILD_DIR}/staging/kitty-terminfo/usr/share
+mv linux-package/share/terminfo ${BUILD_DIR}/staging/kitty-terminfo/usr/share/terminfo
+mkdir -p ${BUILD_DIR}/staging/kitty-shell-integration/usr/share/kitty
+mv linux-package/share/kitty/shell-integration ${BUILD_DIR}/staging/kitty-shell-integration/usr/share/kitty/shell-integration
+mv linux-package ${BUILD_DIR}/staging/kitty/usr
+
+for target in "${TARGETS[@]}"; do
+	cd ${BUILD_DIR}/staging/${target}
+	/sbin/makepkg -l y -p -c n /tmp/${target}-${VERSION}-$(uname -m)-${TAG}.txz
+done
+rm -r -f ${BUILD_DIR}
+
