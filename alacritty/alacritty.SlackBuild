@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2024
+
+set -e
+
+PRGNAM='alacritty'
+VERSION='0.13.2'
+APP_URL="https://github.com/alacritty/alacritty/archive/refs/tags/v${VERSION}.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "${PRGNAM}-${VERSION}.tar.gz" ]; then
+	wget -nc ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.gz"
+fi
+mkdir -v -p "${BUILD_DIR}/install" \
+	"${BUILD_DIR}/usr/bin" \
+	"${BUILD_DIR}/usr/share/pixmaps" \
+	"${BUILD_DIR}/usr/share/applications" \
+	"${BUILD_DIR}/usr/share/man/man1" \
+	"${BUILD_DIR}/usr/share/man/man5" \
+	"${BUILD_DIR}/usr/share/bash-completion/completions" \
+	"${BUILD_DIR}/usr/share/zsh/site-functions" \
+	"${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -v -x -f "${PRGNAM}-${VERSION}.tar.gz" -C "${BUILD_DIR}/src"
+
+# Build
+cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+cargo build --release
+
+# Package
+cd ${BUILD_DIR}
+cp "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/target/release/alacritty" usr/bin/alacritty
+cp "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/logo/alacritty-term.svg" usr/share/pixmaps/Alacritty.svg
+cp "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/linux/Alacritty.desktop" usr/share/applications/Alacritty.desktop
+scdoc < "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/man/alacritty.1.scd" | gzip -c | tee usr/share/man/man1/alacritty.1.gz > /dev/null
+scdoc < "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/man/alacritty-msg.1.scd" | gzip -c | tee usr/share/man/man1/alacritty-msg.1.gz > /dev/null
+scdoc < "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/man/alacritty.5.scd" | gzip -c | tee usr/share/man/man5/alacritty.5.gz > /dev/null
+scdoc < "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/man/alacritty-bindings.5.scd" | gzip -c | tee usr/share/man/man5/alacritty-bindings.5.gz > /dev/null
+cp "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/completions/alacritty.bash" usr/share/bash-completion/completions/alacritty
+cp "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/extra/completions/_alacritty" usr/share/zsh/site-functions/_alacritty
+
+rm -r -f ./src
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
+rm -v -r -f "${BUILD_DIR}"
+
