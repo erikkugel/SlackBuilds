@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2024
+
+set -e
+
+PRGNAM='tint2'
+VERSION='17.0.2'
+APP_URL="https://gitlab.com/o9000/${PRGNAM}/-/archive/${VERSION}/${PRGNAM}-${VERSION}.tar.bz2"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "${PRGNAM}-${VERSION}.tar.bz2" ]; then
+	wget -nc ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.bz2"
+fi
+
+mkdir -v -p "${BUILD_DIR}/install" "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/src"
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -x -f "${PRGNAM}-${VERSION}.tar.bz2" -C "${BUILD_DIR}/src"
+
+# Build
+cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+make install DESTDIR=${BUILD_DIR}
+
+# Package
+cd ${BUILD_DIR}
+rm -r -f ./src
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
+rm -r -f ${BUILD_DIR}
+

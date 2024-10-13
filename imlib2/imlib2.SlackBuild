@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2024
+
+set -e
+
+PRGNAM='imlib2'
+VERSION='1.12.3'
+APP_URL="https://sourceforge.net/projects/enlightenment/files/${PRGNAM}-src/${VERSION}/${PRGNAM}-${VERSION}.tar.xz/download"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "${PRGNAM}-${VERSION}.tar.xz" ]; then
+	wget -nc ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.xz"
+fi
+
+mkdir -v -p "${BUILD_DIR}/install" "${BUILD_DIR}/src/${PRGNAM}-${VERSION}/src"
+cp -v -f ./slack-desc "${BUILD_DIR}/install/slack-desc"
+tar -x -f "${PRGNAM}-${VERSION}.tar.xz" -C "${BUILD_DIR}/src"
+
+# Build
+cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+./configure --prefix=/usr --libdir=/usr/lib64
+make install DESTDIR=${BUILD_DIR}
+
+# Package
+cd ${BUILD_DIR}
+rm -r -f ./src
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
+rm -r -f ${BUILD_DIR}
+
