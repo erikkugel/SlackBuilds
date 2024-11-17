@@ -5,7 +5,7 @@
 set -e
 
 PRGNAM='docker'
-VERSION='23.0.3'
+VERSION='27.3.1'
 APP_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
