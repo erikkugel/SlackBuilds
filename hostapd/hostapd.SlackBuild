@@ -3,7 +3,7 @@
 # Ernest Kugel, 2022
 
 PRGNAM='hostapd'
-VERSION='2.9'
+VERSION='2.11'
 APP_URL="https://w1.fi/releases/${PRGNAM}-${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
