@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2025
+
+set -e
+
+PRGNAM='iotop'
+VERSION='1.27'
+APP_URL="https://github.com/Tomas-M/${PRGNAM}/releases/download/v${VERSION}/${PRGNAM}-${VERSION}.tar.xz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+if [ "$(getconf LONG_BIT)" == '64' ]; then
+        export CFLAGS="${CFLAGS} -O2 -fPIC"
+        export CPPFLAGS="${CPPFLAGS} -O2 -fPIC"
+elif [ "$(getconf LONG_BIT)" == '32' ]; then
+        export CFLAGS="${CFLAGS} -O2 -mtune=native"
+        export CXXFLAGS="${CPPFLAGS} -O2 -mtune=native"
+fi
+
+# Download
+if [ ! -f "${PRGNAM}-${VERSION}.tar.xz" ]; then
+	wget -q ${APP_URL} -O "${PRGNAM}-${VERSION}.tar.xz"
+fi
+mkdir -v -p \
+	${BUILD_DIR}/install \
+	${BUILD_DIR}/src
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -v -x -f ./${PRGNAM}-${VERSION}.tar.xz -C ${BUILD_DIR}/src
+
+# Build
+cd ${BUILD_DIR}/src/${PRGNAM}-${VERSION}
+make
+make install DESTDIR=${BUILD_DIR} 
+
+# Package
+cd ${BUILD_DIR}
+rm -rf ./src
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
+
