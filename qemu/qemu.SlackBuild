@@ -5,7 +5,7 @@
 set -e
 
 PRGNAM='qemu'
-VERSION='9.2.0'
+VERSION='10.0.2'
 APP_URL="https://download.qemu.org/qemu-${VERSION}.tar.xz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
@@ -34,7 +34,7 @@ tar -v -x -f ./qemu-${VERSION}.tar.xz -C ${BUILD_DIR}/src
 cd ${BUILD_DIR}/src/qemu-${VERSION}
 mkdir build
 cd build
-../configure --prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX}
+../configure --enable-slirp --prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX}
 make
 make install DESTDIR=${BUILD_DIR} 
 
