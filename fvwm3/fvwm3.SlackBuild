@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2024
+# Ernest Kugel, 2025
 
 set -e
 
 PRGNAM='fvwm3'
-VERSION='1.1.0'
-ASCIIDOCTOR_VERSION='2.0.20'
+VERSION='1.1.2'
+ASCIIDOCTOR_VERSION='2.0.23'
 APP_URL="https://github.com/fvwmorg/${PRGNAM}/releases/download/${VERSION}/${PRGNAM}-${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
@@ -27,6 +27,7 @@ export PATH="${PATH}:${BUILD_DIR}/asciidoctor-${ASCIIDOCTOR_VERSION}/bin"
 
 # Build
 cd "${BUILD_DIR}/src/${PRGNAM}-${VERSION}"
+./autogen.sh
 ./configure --prefix=/usr --enable-mandoc --enable-htmldoc
 make install DESTDIR=${BUILD_DIR}
 
