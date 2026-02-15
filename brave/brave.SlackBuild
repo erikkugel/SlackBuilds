@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2026
+
+set -e
+
+PRGNAM='brave'
+VERSION="$(gh release list --repo brave/brave-browser --json tagName,isLatest --jq '.[] | select(.isLatest == true) | .tagName')"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+gh release download ${VERSION} --pattern 'brave-browser-*-linux-amd64.zip' --skip-existing --repo brave/brave-browser
+mkdir -v -p \
+	${BUILD_DIR}/install \
+	${BUILD_DIR}/opt/brave
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+unzip -d ${BUILD_DIR}/opt/brave "brave-browser-$(echo ${VERSION} | tr -d '[:alpha:]')-linux-amd64.zip"
+
+# Package
+cd ${BUILD_DIR}
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-$(echo ${VERSION} | tr -d '[:alpha:]')-$(uname -m)-${TAG}.txz"
+rm -v -r -f ${BUILD_DIR}
+

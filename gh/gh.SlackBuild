@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2025
+
+set -e
+
+PRGNAM='gh'
+VERSION='2.86.0'
+APP_URL="https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_linux_amd64.tar.gz"
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+if [ ! -f "gh-${VERSION}.tar.xz" ]; then
+	wget -q ${APP_URL} -O "gh-${VERSION}.tar.xz"
+fi
+mkdir -v -p \
+	${BUILD_DIR}/install \
+	${BUILD_DIR}/usr
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -v -x -f ./gh-${VERSION}.tar.xz --strip-components=1 --exclude=LICENSE -C ${BUILD_DIR}/usr
+
+# Package
+cd ${BUILD_DIR}
+find ./usr/share/man -type f -exec bzip2 -9 {} \;
+/sbin/makepkg -l y -c n /tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz
+rm -v -r -f ${BUILD_DIR}
+
