@@ -29,7 +29,7 @@ runs:
       with:
         target: ${{ inputs.targets }}
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: packages
         path: ./packages/*.txz
