@@ -23,7 +23,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout SlackBuilds
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
           #fetch-depth: 2
