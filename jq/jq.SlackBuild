@@ -5,7 +5,7 @@
 set -e
 
 PRGNAM='jq'
-VERSION='1.6'
+VERSION='1.8.1'
 APP_URL="https://github.com/stedolan/${PRGNAM}/releases/download/${PRGNAM}-${VERSION}/${PRGNAM}-${VERSION}.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
@@ -39,4 +39,3 @@ cd ${BUILD_DIR}
 rm -r -f ./src
 /sbin/makepkg -l y -c n "/tmp/${PRGNAM}-${VERSION}-$(uname -m)-${TAG}.txz"
 rm -v -r -f "${BUILD_DIR}"
-
