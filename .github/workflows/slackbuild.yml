@@ -20,6 +20,8 @@ on:
 jobs:
   slackbuild:
     runs-on: [ubuntu-latest]
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - id: checkout
         name: Checkout SlackBuilds
