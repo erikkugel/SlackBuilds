@@ -28,7 +28,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ github.ref }}
-          #fetch-depth: 2
 
       - id: targets
         name: Targets
@@ -69,5 +68,5 @@ jobs:
         with:
           targets: ${{ steps.targets.outputs.targets }}
           cr_username: ${{ github.actor }}
-          cr_password: ${{ secrets.GITHUB_TOKEN }}
+          cr_password: ${{ github.token }}
 
