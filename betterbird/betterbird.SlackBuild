@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# Ernest Kugel, 2026
+
+set -e
+
+PRGNAM='betterbird'
+BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
+TAG='1_x'
+
+# Download
+wget -O betterbird-latest.tar.xz "https://www.betterbird.eu/downloads/get.php?os=linux&lang=en-US&version=release"
+
+mkdir -v -p \
+	${BUILD_DIR}/install \
+	${BUILD_DIR}/opt
+
+cp -v -f ./slack-desc ${BUILD_DIR}/install/slack-desc
+tar -C ${BUILD_DIR}/opt -xf betterbird-latest.tar.xz
+VERSION="$(./betterbird_version.pl ${BUILD_DIR}/opt/betterbird/platform.ini)"
+
+# Package
+cd ${BUILD_DIR}
+/sbin/makepkg -l y -c n "/tmp/${PRGNAM}-$(echo ${VERSION} | tr -d '[:alpha:]')-$(uname -m)-${TAG}.txz"
+rm -v -r -f ${BUILD_DIR}
