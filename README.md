@@ -24,7 +24,7 @@ A Docker image using a Slackware64 base image can be used for situations where b
 
 Pull the `slackbuild` image:
 
-```docker pull ghcr.io/erikkugel/slackbuild:0.0.1```
+```docker pull ghcr.io/erikkugel/slackbuild:latest```
 
 Run the image with the following parameters:
 1. The SlackBuilds repository as a Docker volume under `/SlackBuilds` with read/write permissions
@@ -34,7 +34,7 @@ Run the image with the following parameters:
 ## Example
 Build the `alttab` package atop its `uthash` dependency:
 
-```docker run -v /home/erikkugel/src/SlackBuilds:/SlackBuilds -v /tmp/packages:/packages slackbuild:0.0.1 "uthash,alttab"```
+```docker run -v /home/erikkugel/src/SlackBuilds:/SlackBuilds -v /tmp/packages:/packages slackbuild:latest "uthash,alttab"```
 
 ## About the `slackbuild` Docker Image
 The `slackbuild` image is built using [this Dockerfile](Package/Dockerfile) and a [vanilla latest stable Slackware64 image](https://github.com/users/erikkugel/packages/container/package/slackware64-15.0) containing the _a_, _d_, _l_, _n_ and _x_ package categories as base.
