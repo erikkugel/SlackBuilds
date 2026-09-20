@@ -7,3 +7,5 @@ if [ -z "$(getent passwd docker)" ]; then
 	/usr/sbin/useradd -g docker -r docker
 fi
 
+/usr/bin/docker completion bash > /usr/share/bash-completion/completions/docker
+

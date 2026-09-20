@@ -1,11 +1,11 @@
 #!/bin/bash
 #
-# Ernest Kugel, 2023
+# Ernest Kugel, 2026
 
 set -e
 
 PRGNAM='docker'
-VERSION='29.2.1'
+VERSION='29.7.2'
 APP_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${VERSION}.tgz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'

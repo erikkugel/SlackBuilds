@@ -5,7 +5,7 @@
 set -e
 
 PRGNAM='gh'
-VERSION='2.86.0'
+VERSION='2.93.0'
 APP_URL="https://github.com/cli/cli/releases/download/v${VERSION}/gh_${VERSION}_linux_amd64.tar.gz"
 BUILD_DIR="/tmp/SlackBuild-${PRGNAM}-$(date +%s)"
 TAG='1_x'
